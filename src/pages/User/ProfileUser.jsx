@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yub from "yup";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function ProfileUser() {
-  const { state } = useLocation();
   const navigate = useNavigate();
+  let { id } = useParams();
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    axios.get(`http://localhost:3001/users/${id}/`).then((response) => {
+      if (Object.keys(response.data.data).length == 0) {
+        navigate("/");
+      }
+      setUser(response.data.data);
+    });
+  }, [id]);
   const {
-    id,
     first_name,
     last_name,
     username,
@@ -17,7 +25,7 @@ function ProfileUser() {
     password,
     address,
     profile_picture,
-  } = state.user;
+  } = user;
   const validationSchema = Yub.object().shape({
     first_name: Yub.string()
       .min(8, "first name must be at least 8 characters")
