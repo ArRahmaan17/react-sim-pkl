@@ -47,7 +47,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: .1rem;
-  justify-content: end;
+  justify-content: flex-end;
   border-radius: 0 0 0.375rem 0.375rem;
 }
 
@@ -152,7 +152,7 @@ textarea.form-control {
   display: flex;
   flex-wrap: wrap;
   gap: .3rem;
-  justify-content: end;
+  justify-content: flex-end;
   border-radius: 0 0 0.375rem 0.375rem;
 }
 

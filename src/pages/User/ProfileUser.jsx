@@ -10,12 +10,12 @@ function ProfileUser() {
   const [user, setUser] = useState({});
   useEffect(() => {
     axios.get(`http://localhost:3001/users/${id}/`).then((response) => {
-      if (Object.keys(response.data.data).length == 0) {
+      if (Object.keys(response.data.data).length === 0) {
         navigate("/");
       }
       setUser(response.data.data);
     });
-  }, [id]);
+  }, [id, navigate]);
   const {
     first_name,
     last_name,
@@ -43,7 +43,7 @@ function ProfileUser() {
     profile_picture: Yub.mixed()
       .nullable(true)
       .test("FILE_ALLOWED", "type file is not allowed", (value) => {
-        if (value == undefined) {
+        if (value === undefined) {
           return true;
         } else {
           return value.type.split("image/").length > 1;
@@ -181,7 +181,7 @@ function ProfileUser() {
             <span className="invalid">{formik.errors.password}</span>
           )}
           <label className="label" htmlFor="profile_picture">
-            Profile Picture
+            Profile Picture : {profile_picture}
           </label>
           <input
             className="form-control-file"

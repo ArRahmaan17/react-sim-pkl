@@ -7,19 +7,19 @@ function User() {
   const [user, setUser] = useState({});
   useEffect(() => {
     axios.get(`http://localhost:3001/users/${id}/`).then((response) => {
-      if (Object.keys(response.data.data).length == 0) {
+      if (Object.keys(response.data.data).length === 0) {
         navigate("/");
       }
       setUser(response.data.data);
     });
-  }, [id]);
+  }, [id, navigate]);
   return (
     <div className="card">
       <div className="card-header">Detail User {id}</div>
       <div className="card-body">
         <div>
           Name:
-          {user.first_name == null
+          {user.first_name === null
             ? "Empty"
             : `${user.first_name} ${user.last_name}`}
         </div>
