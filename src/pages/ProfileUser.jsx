@@ -31,7 +31,11 @@ function ProfileUser() {
     phone_number: Yub.string().min(11).max(13).required(),
     password: Yub.string().min(7).max(15).required(),
     address: Yub.string().min(15).max(255).required(),
-    profile_picture: Yub.mixed().required(),
+    profile_picture: Yub.mixed()
+      .required()
+      .test("FILE_ALLOWED", "type file is not allowed", (value) => {
+        return value.type.split("image/").length > 1;
+      }),
   });
   const back = () => {
     navigate(`/user/${id}`);
@@ -49,16 +53,20 @@ function ProfileUser() {
     },
     validationSchema: validationSchema,
     onSubmit: (data) => {
-      console.log(data);
-      // axios.post(`http://localhost:3001/users/${id}`, data).then((response) => {
-      //   navigate(`/user/${id}`);
-      // });
+      let postData = new FormData(
+        document.getElementById("form-profile-upload")
+      );
+      axios
+        .post(`http://localhost:3001/users/${id}`, postData)
+        .then((response) => {
+          navigate(`/user/${id}`);
+        });
     },
   });
   return (
     <div className="card">
       <div className="card-body">
-        <form onSubmit={formik.handleSubmit}>
+        <form id="form-profile-upload" onSubmit={formik.handleSubmit}>
           <label className="label" htmlFor="first_name">
             First Name
           </label>
@@ -166,6 +174,7 @@ function ProfileUser() {
             type="file"
             id="profile_picture"
             name="profile_picture"
+            accept="image/*"
             onChange={(e) => {
               formik.setFieldValue("profile_picture", e.currentTarget.files[0]);
             }}
