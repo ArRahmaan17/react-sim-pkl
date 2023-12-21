@@ -16,6 +16,7 @@ function ProfileUser() {
     phone_number,
     password,
     address,
+    profile_picture,
   } = state.user;
   const validationSchema = Yub.object().shape({
     first_name: Yub.string()
@@ -32,9 +33,13 @@ function ProfileUser() {
     password: Yub.string().min(7).max(15).required(),
     address: Yub.string().min(15).max(255).required(),
     profile_picture: Yub.mixed()
-      .required()
+      .nullable(true)
       .test("FILE_ALLOWED", "type file is not allowed", (value) => {
-        return value.type.split("image/").length > 1;
+        if (value == undefined) {
+          return true;
+        } else {
+          return value.type.split("image/").length > 1;
+        }
       }),
   });
   const back = () => {
@@ -56,6 +61,9 @@ function ProfileUser() {
       let postData = new FormData(
         document.getElementById("form-profile-upload")
       );
+      if (postData.profile_picture == null) {
+        postData.delete("profile_picture");
+      }
       axios
         .post(`http://localhost:3001/users/${id}`, postData)
         .then((response) => {
@@ -76,7 +84,7 @@ function ProfileUser() {
             type="text"
             id="first_name"
             name="first_name"
-            value={first_name ?? ""}
+            defaultValue={first_name ?? ""}
           />
           {formik.errors.first_name && (
             <span className="invalid">{formik.errors.first_name}</span>
@@ -90,7 +98,7 @@ function ProfileUser() {
             type="text"
             id="last_name"
             name="last_name"
-            value={last_name ?? ""}
+            defaultValue={last_name ?? ""}
           />
           {formik.errors.last_name && (
             <span className="invalid">{formik.errors.last_name}</span>
@@ -104,7 +112,7 @@ function ProfileUser() {
             type="text"
             id="username"
             name="username"
-            value={username ?? ""}
+            defaultValue={username ?? ""}
           />
           {formik.errors.username && (
             <span className="invalid">{formik.errors.username}</span>
@@ -118,7 +126,7 @@ function ProfileUser() {
             type="email"
             id="email"
             name="email"
-            value={email ?? ""}
+            defaultValue={email ?? ""}
           />
           {formik.errors.email && (
             <span className="invalid">{formik.errors.email}</span>
@@ -132,7 +140,7 @@ function ProfileUser() {
             type="text"
             id="phone_number"
             name="phone_number"
-            value={phone_number ?? ""}
+            defaultValue={phone_number ?? ""}
           />
           {formik.errors.phone_number && (
             <span className="invalid">{formik.errors.phone_number}</span>
@@ -145,9 +153,8 @@ function ProfileUser() {
             className="form-control"
             id="address"
             name="address"
-          >
-            {address ?? ""}
-          </textarea>
+            defaultValue={address ?? ""}
+          ></textarea>
           {formik.errors.address && (
             <span className="invalid">{formik.errors.address}</span>
           )}
@@ -160,7 +167,7 @@ function ProfileUser() {
             type="password"
             id="password"
             name="password"
-            value={password ?? ""}
+            defaultValue={password ?? ""}
           />
           {formik.errors.password && (
             <span className="invalid">{formik.errors.password}</span>
