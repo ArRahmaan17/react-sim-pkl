@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yub from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Root from "../../routes/Root";
 
 function CreateUser() {
   let navigate = useNavigate();
@@ -21,78 +22,87 @@ function CreateUser() {
     password: Yub.string().min(7).max(15).required(),
   });
   return (
-    <div className="card">
-      <div className="card-body">
-        <Formik
-          onSubmit={submitForm}
-          initialValues={{
-            username: "",
-            phone_number: "",
-            email: "",
-            password: "",
-          }}
-          validationSchema={validationSchema}
-        >
-          <Form>
-            <label className="label">Username</label>
-            <Field
-              autoComplete="off"
-              className="form-control"
-              type="text"
-              id="username"
-              placeholder="john"
-              name="username"
-            />
-            <ErrorMessage
-              className="invalid"
-              name="username"
-              component="span"
-            />
-            <label className="label">Email</label>
-            <Field
-              autoComplete="off"
-              className="form-control"
-              type="email"
-              id="email"
-              placeholder="john@jhon.com"
-              name="email"
-            />
-            <ErrorMessage className="invalid" name="email" component="span" />
-            <label className="label">Phone Number</label>
-            <Field
-              autoComplete="off"
-              className="form-control"
-              type="text"
-              id="phone_number"
-              placeholder="890-31...."
-              name="phone_number"
-            />
-            <ErrorMessage
-              className="invalid"
-              name="phone_number"
-              component="span"
-            />
-            <label className="label">Password</label>
-            <Field
-              autoComplete="off"
-              className="form-control"
-              type="password"
-              id="password"
-              placeholder="password"
-              name="password"
-            />
-            <ErrorMessage
-              className="invalid"
-              name="password"
-              component="span"
-            />
-            <button className="btn btn-success" type="submit">
-              Create User
-            </button>
-          </Form>
-        </Formik>
+    <>
+      <Root />
+      <div className="main-content">
+        <div className="card">
+          <div className="card-body">
+            <Formik
+              onSubmit={submitForm}
+              initialValues={{
+                username: "",
+                phone_number: "",
+                email: "",
+                password: "",
+              }}
+              validationSchema={validationSchema}
+            >
+              <Form>
+                <label className="label">Username</label>
+                <Field
+                  autoComplete="off"
+                  className="form-control"
+                  type="text"
+                  id="username"
+                  placeholder="john"
+                  name="username"
+                />
+                <ErrorMessage
+                  className="invalid"
+                  name="username"
+                  component="span"
+                />
+                <label className="label">Email</label>
+                <Field
+                  autoComplete="off"
+                  className="form-control"
+                  type="email"
+                  id="email"
+                  placeholder="john@jhon.com"
+                  name="email"
+                />
+                <ErrorMessage
+                  className="invalid"
+                  name="email"
+                  component="span"
+                />
+                <label className="label">Phone Number</label>
+                <Field
+                  autoComplete="off"
+                  className="form-control"
+                  type="text"
+                  id="phone_number"
+                  placeholder="890-31...."
+                  name="phone_number"
+                />
+                <ErrorMessage
+                  className="invalid"
+                  name="phone_number"
+                  component="span"
+                />
+                <label className="label">Password</label>
+                <Field
+                  autoComplete="off"
+                  className="form-control"
+                  type="password"
+                  id="password"
+                  placeholder="password"
+                  name="password"
+                />
+                <ErrorMessage
+                  className="invalid"
+                  name="password"
+                  component="span"
+                />
+                <button className="btn btn-success" type="submit">
+                  Create User
+                </button>
+              </Form>
+            </Formik>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
