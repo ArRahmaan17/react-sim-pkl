@@ -49,8 +49,8 @@ function CreateUser() {
                 />
                 <ErrorMessage
                   className="invalid"
-                  name="username"
                   component="span"
+                  name="username"
                 />
                 <label className="label">Email</label>
                 <Field

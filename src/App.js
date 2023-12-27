@@ -45,5 +45,6 @@ function Root() {
       <Route path='/create-user' Component={CreateUser} />
       <Route path='/user/:id' exact Component={User} />
       <Route path='/user/:id/update' exact Component={ProfileUser} />
+      <Route path='/attendance' exact Component={Attendance} />
     </Routes>);
 }

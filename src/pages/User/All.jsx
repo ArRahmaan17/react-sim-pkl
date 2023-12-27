@@ -16,25 +16,23 @@ function All() {
     <>
       <Root />
       <div className="main-content">
-        <div className="container">
-          {listOfUsers.map((value, key) => {
-            return (
-              <div
-                key={value.id}
-                className="card"
-                onClick={() => {
-                  navigate(`/user/${value.id}`);
-                }}
-              >
-                <div className="card-header">{value.username}</div>
-                <div className="card-body">
-                  <div className="card-title">{value.email}</div>
-                  <div className="card-text">{value.phone_number}</div>
-                </div>
+        {listOfUsers.map((value, key) => {
+          return (
+            <div
+              key={value.id}
+              className="card"
+              onClick={() => {
+                navigate(`/user/${value.id}`);
+              }}
+            >
+              <div className="card-header">{value.username}</div>
+              <div className="card-body">
+                <div className="card-title">{value.email}</div>
+                <div className="card-text">{value.phone_number}</div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
     </>
   );

@@ -7,6 +7,9 @@ export default function Root() {
       <Link className="sidebar-item" to="/">
         Home
       </Link>
+      <Link className="sidebar-item" to="/attendance">
+        Attendance
+      </Link>
       <Link className="sidebar-item" to="/create-user">
         Create User
       </Link>
