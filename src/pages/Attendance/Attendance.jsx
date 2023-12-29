@@ -1,13 +1,32 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Root from "../../routes/Root";
 import Webcam from "react-webcam";
-import { Form, Field, useFormik, Formik, ErrorMessage } from "formik";
+import { Form, Field, Formik, ErrorMessage } from "formik";
 import * as Yub from "yup";
+import axios from "axios";
+import { Buffer } from "buffer";
 function Attendance() {
   const ref = useRef(null);
   let [img, getSourceImage] = useState("");
   let [width, getWidthSource] = useState(0);
   let [height, getHeightSource] = useState(0);
+  const [location, setLocation] = useState(null);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setError("Cant Get Your Current Location");
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setLocation({ latitude, longitude });
+      },
+      (error) => {
+        setError(error.message);
+      }
+    );
+  }, []);
   const capture = () => {
     getWidthSource(ref.current.video.clientWidth);
     getHeightSource(ref.current.video.clientHeight);
@@ -17,7 +36,16 @@ function Attendance() {
     getSourceImage("");
   };
   const validationSchema = Yub.object().shape({
-    username: Yub.string().required(),
+    username: Yub.string()
+      .trim()
+      .test(
+        "WHITE_SPACE_EXISTS",
+        "username cant contain a white space",
+        (value) => {
+          return value.split(" ").length < 2;
+        }
+      )
+      .required(),
     status: Yub.string().required(),
     photo: Yub.mixed().test(
       "NOT_NULL",
@@ -32,6 +60,12 @@ function Attendance() {
   });
   const attendanceSubmit = (data) => {
     data.photo = document.getElementById("photo").value;
+    data.location = document.getElementById("location").value;
+    axios
+      .post("http://localhost:3001/users/attendance", data)
+      .then((response) => {
+        console.log(response);
+      });
   };
   return (
     <>
@@ -42,6 +76,7 @@ function Attendance() {
             <div className="card-title">Attendance Form</div>
           </div>
           <div className="card-body">
+            <div className="">{error}</div>
             <Formik
               validateOnChange={false}
               validateOnBlur={false}
@@ -68,6 +103,7 @@ function Attendance() {
                   Status
                 </label>
                 <Field
+                  autoComplete="off"
                   as="select"
                   id="status"
                   name="status"
@@ -107,6 +143,12 @@ function Attendance() {
                   name="photo"
                   component="span"
                   className="invalid"
+                />
+                <Field
+                  value={JSON.stringify(location)}
+                  type="hidden"
+                  id="location"
+                  name="location"
                 />
                 <div className="btn-group">
                   <button
