@@ -4,8 +4,10 @@ import Webcam from "react-webcam";
 import { Form, Field, Formik, ErrorMessage } from "formik";
 import * as Yub from "yup";
 import axios from "axios";
-import { Buffer } from "buffer";
+import { useNavigate } from "react-router-dom";
+
 function Attendance() {
+  const navigate = useNavigate();
   const ref = useRef(null);
   let [img, getSourceImage] = useState("");
   let [width, getWidthSource] = useState(0);
@@ -64,7 +66,7 @@ function Attendance() {
     axios
       .post("http://localhost:3001/users/attendance", data)
       .then((response) => {
-        console.log(response);
+        navigate("/");
       });
   };
   return (
