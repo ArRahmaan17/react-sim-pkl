@@ -13,6 +13,9 @@ export default function Root() {
       <Link className="sidebar-item" to="/create-user">
         Create User
       </Link>
+      <Link className="sidebar-item" to="/login">
+        Login
+      </Link>
     </div>
   );
 }

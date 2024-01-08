@@ -1,10 +1,11 @@
 import './App.css';
 import { createBrowserRouter, Route, RouterProvider, Routes } from 'react-router-dom'
 import User from './pages/User/User';
-import CreateUser from './pages/User/CreateUser';
+import CreateUser from './pages/Auth/CreateUser';
 import All from './pages/User/All';
 import ProfileUser from './pages/User/ProfileUser';
 import Attendance from './pages/Attendance/Attendance';
+import Login from './pages/Auth/Login';
 
 const router = createBrowserRouter([
   {
@@ -46,5 +47,6 @@ function Root() {
       <Route path='/user/:id' exact Component={User} />
       <Route path='/user/:id/update' exact Component={ProfileUser} />
       <Route path='/attendance' exact Component={Attendance} />
+      <Route path='/login' exact Component={Login} />
     </Routes>);
 }

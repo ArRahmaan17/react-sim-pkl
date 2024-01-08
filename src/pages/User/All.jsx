@@ -8,9 +8,14 @@ function All() {
   const [listOfUsers, setUsers] = useState([]);
   let navigate = useNavigate();
   useEffect(() => {
-    axios.get("http://localhost:3001/users").then((response) => {
-      setUsers(response.data.data);
-    });
+    const loggedIn = localStorage.getItem("accessToken");
+    if (!loggedIn) {
+      navigate("/login");
+    } else {
+      axios.get("http://localhost:3001/users").then((response) => {
+        setUsers(response.data.data);
+      });
+    }
   }, []);
   return (
     <>

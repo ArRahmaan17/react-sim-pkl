@@ -18,16 +18,17 @@ function Attendance() {
     if (!navigator.geolocation) {
       setError("Cant Get Your Current Location");
       return;
+    } else {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLocation({ latitude, longitude });
+        },
+        (error) => {
+          setError(error.message);
+        }
+      );
     }
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setLocation({ latitude, longitude });
-      },
-      (error) => {
-        setError(error.message);
-      }
-    );
   }, []);
   const capture = () => {
     getWidthSource(ref.current.video.clientWidth);
@@ -130,6 +131,7 @@ function Attendance() {
                 </label>
                 <Webcam ref={ref} className="camera-stream" alt="camera" />
                 <img
+                  className="camera-stream"
                   src={img}
                   alt="container_attendance_photo"
                   width={width / 1.3}

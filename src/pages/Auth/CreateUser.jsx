@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yub from "yup";
 import axios from "axios";
@@ -7,10 +7,18 @@ import Root from "../../routes/Root";
 
 function CreateUser() {
   let navigate = useNavigate();
-  const submitForm = (data) => {
-    axios.post("http://localhost:3001/users", data).then((response) => {
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
       navigate("/");
-    });
+    }
+  }, []);
+  const submitForm = (data) => {
+    axios
+      .post("http://localhost:3001/users/auth/registration", data)
+      .then((response) => {
+        navigate("/");
+      });
   };
   const validationSchema = Yub.object().shape({
     username: Yub.string().min(5).max(15).required(),
