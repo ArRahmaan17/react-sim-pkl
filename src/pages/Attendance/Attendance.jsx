@@ -111,7 +111,6 @@ function Attendance() {
                   id="status"
                   name="status"
                   className="form-control-select"
-                  defaultValue="IN"
                 >
                   <option disabled value="">
                     Please Select An Option

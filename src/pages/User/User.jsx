@@ -7,12 +7,19 @@ function User() {
   let { id } = useParams();
   const [user, setUser] = useState({});
   useEffect(() => {
-    axios.get(`http://localhost:3001/users/${id}/`).then((response) => {
-      if (Object.keys(response.data.data).length === 0) {
-        navigate("/");
-      }
-      setUser(response.data.data);
-    });
+    const loggedIn = localStorage.getItem("accessToken");
+    axios
+      .get(`http://localhost:3001/users/${id}/`, {
+        headers: {
+          "X-ACCESS-TOKEN": loggedIn,
+        },
+      })
+      .then((response) => {
+        if (Object.keys(response.data.data).length === 0) {
+          navigate("/");
+        }
+        setUser(response.data.data);
+      });
   }, [id, navigate]);
   return (
     <>

@@ -9,24 +9,6 @@ function ProfileUser() {
   const navigate = useNavigate();
   let { id } = useParams();
   const [user, setUser] = useState({});
-  useEffect(() => {
-    axios.get(`http://localhost:3001/users/${id}/`).then((response) => {
-      if (Object.keys(response.data.data).length === 0) {
-        navigate("/");
-      }
-      setUser(response.data.data);
-    });
-  }, [id, navigate]);
-  const {
-    first_name,
-    last_name,
-    username,
-    email,
-    phone_number,
-    password,
-    address,
-    profile_picture,
-  } = user;
   const validationSchema = Yub.object().shape({
     first_name: Yub.string()
       .min(8, "first name must be at least 8 characters")
@@ -51,21 +33,29 @@ function ProfileUser() {
         }
       }),
   });
-  const back = () => {
-    navigate(`/user/${id}`);
-  };
+  const {
+    first_name,
+    last_name,
+    username,
+    email,
+    phone_number,
+    password,
+    address,
+    profile_picture,
+  } = user;
   const formik = useFormik({
     initialValues: {
-      first_name: first_name ?? "",
-      last_name: last_name ?? "",
-      username: username ?? "",
-      email: email ?? "",
-      phone_number: phone_number ?? "",
-      password: password ?? "",
-      address: address ?? "",
-      profile_picture: "",
+      first_name: first_name,
+      last_name: last_name,
+      username: username,
+      email: email,
+      phone_number: phone_number,
+      password: password,
+      address: address,
+      profile_picture: profile_picture,
     },
     validationSchema: validationSchema,
+    validateOnChange: false,
     onSubmit: (data) => {
       let postData = new FormData(
         document.getElementById("form-profile-upload")
@@ -80,6 +70,35 @@ function ProfileUser() {
         });
     },
   });
+
+  const setValue = (id, valueParam) => {
+    if (document.getElementById(id)) {
+      formik.setFieldValue(`${id}`, valueParam === null ? "" : valueParam);
+    }
+  };
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("accessToken");
+    axios
+      .get(`http://localhost:3001/users/${id}/`, {
+        headers: {
+          "X-ACCESS-TOKEN": loggedIn,
+        },
+      })
+      .then((response) => {
+        if (Object.keys(response.data.data).length === 0) {
+          navigate("/");
+        }
+        setUser(response.data.data);
+        Object.keys(response.data.data).forEach((id, index) => {
+          let value = Object.values(response.data.data).at(index);
+          setValue(id, value);
+        });
+      });
+  }, [navigate, id]);
+  const back = () => {
+    navigate(`/user/${id}`);
+  };
+
   return (
     <>
       <Root />
@@ -96,7 +115,13 @@ function ProfileUser() {
                 type="text"
                 id="first_name"
                 name="first_name"
-                defaultValue={first_name ?? ""}
+                onChange={(e) => {
+                  formik.setFieldValue(
+                    "first_name",
+                    e.currentTarget.value ?? first_name
+                  );
+                }}
+                value={first_name ?? ""}
               />
               {formik.errors.first_name && (
                 <span className="invalid">{formik.errors.first_name}</span>
@@ -110,7 +135,13 @@ function ProfileUser() {
                 type="text"
                 id="last_name"
                 name="last_name"
-                defaultValue={last_name ?? ""}
+                onChange={(e) => {
+                  formik.setFieldValue(
+                    "last_name",
+                    e.currentTarget.value ?? last_name
+                  );
+                }}
+                value={last_name ?? ""}
               />
               {formik.errors.last_name && (
                 <span className="invalid">{formik.errors.last_name}</span>
@@ -124,7 +155,13 @@ function ProfileUser() {
                 type="text"
                 id="username"
                 name="username"
-                defaultValue={username ?? ""}
+                onChange={(e) => {
+                  formik.setFieldValue(
+                    "username",
+                    e.currentTarget.value ?? username
+                  );
+                }}
+                value={username ?? ""}
               />
               {formik.errors.username && (
                 <span className="invalid">{formik.errors.username}</span>
@@ -138,7 +175,10 @@ function ProfileUser() {
                 type="email"
                 id="email"
                 name="email"
-                defaultValue={email ?? ""}
+                onChange={(e) => {
+                  formik.setFieldValue("email", e.currentTarget.value ?? email);
+                }}
+                value={email ?? ""}
               />
               {formik.errors.email && (
                 <span className="invalid">{formik.errors.email}</span>
@@ -152,7 +192,13 @@ function ProfileUser() {
                 type="text"
                 id="phone_number"
                 name="phone_number"
-                defaultValue={phone_number ?? ""}
+                onChange={(e) => {
+                  formik.setFieldValue(
+                    "phone_number",
+                    e.currentTarget.value ?? phone_number
+                  );
+                }}
+                value={phone_number ?? ""}
               />
               {formik.errors.phone_number && (
                 <span className="invalid">{formik.errors.phone_number}</span>
@@ -165,7 +211,10 @@ function ProfileUser() {
                 className="form-control"
                 id="address"
                 name="address"
-                defaultValue={address ?? ""}
+                onChange={(e) => {
+                  formik.setFieldValue("address", e.currentTarget.value);
+                }}
+                value={address ?? ""}
               ></textarea>
               {formik.errors.address && (
                 <span className="invalid">{formik.errors.address}</span>
@@ -179,7 +228,7 @@ function ProfileUser() {
                 type="password"
                 id="password"
                 name="password"
-                defaultValue={password ?? ""}
+                value={password}
               />
               {formik.errors.password && (
                 <span className="invalid">{formik.errors.password}</span>

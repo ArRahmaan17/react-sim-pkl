@@ -12,11 +12,17 @@ function All() {
     if (!loggedIn) {
       navigate("/login");
     } else {
-      axios.get("http://localhost:3001/users").then((response) => {
-        setUsers(response.data.data);
-      });
+      axios
+        .get("http://localhost:3001/users", {
+          headers: {
+            "X-ACCESS-TOKEN": loggedIn,
+          },
+        })
+        .then((response) => {
+          setUsers(response.data.data);
+        });
     }
-  }, []);
+  }, [navigate]);
   return (
     <>
       <Root />

@@ -11,7 +11,7 @@ function Login() {
     if (token) {
       navigate("/");
     }
-  }, []);
+  }, [navigate]);
   let [message, setMessage] = useState("");
   const initialValues = { username: "", password: "" };
   const validationSchema = Yub.object().shape({
@@ -20,7 +20,7 @@ function Login() {
   });
   const loginProcess = (data) => {
     axios
-      .post("http://localhost:3001/users/auth/login", data)
+      .post("http://localhost:3001/auth/login", data)
       .then((response) => {
         localStorage.setItem("accessToken", response.data.data.accessToken);
         navigate("/");
