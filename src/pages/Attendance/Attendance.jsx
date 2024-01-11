@@ -5,6 +5,7 @@ import { Form, Field, Formik, ErrorMessage } from "formik";
 import * as Yub from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 function Attendance() {
   const navigate = useNavigate();
@@ -13,8 +14,14 @@ function Attendance() {
   let [width, getWidthSource] = useState(0);
   let [height, getHeightSource] = useState(0);
   const [location, setLocation] = useState(null);
+  const [username, setUsername] = useState("");
+  const [id, setId] = useState("");
   const [error, setError] = useState(null);
+  const loggedIn = localStorage.getItem("accessToken");
   useEffect(() => {
+    const token = jwtDecode(localStorage.getItem("accessToken"));
+    setUsername(token.username);
+    setId(token.id);
     if (!navigator.geolocation) {
       setError("Cant Get Your Current Location");
       return;
@@ -65,7 +72,9 @@ function Attendance() {
     data.photo = document.getElementById("photo").value;
     data.location = document.getElementById("location").value;
     axios
-      .post("http://localhost:3001/users/attendance", data)
+      .post("http://localhost:3001/users/attendance", data, {
+        headers: { "X-ACCESS-TOKEN": loggedIn },
+      })
       .then((response) => {
         navigate("/");
       });
@@ -81,11 +90,13 @@ function Attendance() {
           <div className="card-body">
             <div className="">{error}</div>
             <Formik
+              enableReinitialize={true}
               validateOnChange={false}
               validateOnBlur={false}
               validateOnMount={false}
               initialValues={{
-                username: "",
+                userId: id,
+                username: username,
                 status: "",
                 photo: "",
               }}
@@ -93,10 +104,22 @@ function Attendance() {
               onSubmit={attendanceSubmit}
             >
               <Form id="form-attendance">
+                <Field
+                  name="userId"
+                  id="userId"
+                  className="form-control"
+                  readOnly
+                  type="hidden"
+                />
                 <label className="label" htmlFor="username">
                   Username
                 </label>
-                <Field name="username" id="username" className="form-control" />
+                <Field
+                  name="username"
+                  id="username"
+                  className="form-control"
+                  readOnly
+                />
                 <ErrorMessage
                   name="username"
                   component="span"
