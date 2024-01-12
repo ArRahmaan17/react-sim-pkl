@@ -19,22 +19,26 @@ function Attendance() {
   const [error, setError] = useState(null);
   const loggedIn = localStorage.getItem("accessToken");
   useEffect(() => {
-    const token = jwtDecode(localStorage.getItem("accessToken"));
-    setUsername(token.username);
-    setId(token.id);
-    if (!navigator.geolocation) {
-      setError("Cant Get Your Current Location");
-      return;
+    if (!loggedIn) {
+      navigate("/login");
     } else {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setLocation({ latitude, longitude });
-        },
-        (error) => {
-          setError(error.message);
-        }
-      );
+      const token = jwtDecode(localStorage.getItem("accessToken"));
+      setUsername(token.username);
+      setId(token.id);
+      if (!navigator.geolocation) {
+        setError("Cant Get Your Current Location");
+        return;
+      } else {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setLocation({ latitude, longitude });
+          },
+          (error) => {
+            setError(error.message);
+          }
+        );
+      }
     }
   }, []);
   const capture = () => {

@@ -57,7 +57,12 @@ function Login() {
                 <label htmlFor="password" className="label">
                   Password
                 </label>
-                <Field id="password" name="password" className="form-control" />
+                <Field
+                  id="password"
+                  type="password"
+                  name="password"
+                  className="form-control"
+                />
                 <ErrorMessage
                   component="span"
                   className="invalid"

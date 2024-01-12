@@ -12,7 +12,7 @@ function CreateUser() {
     if (token) {
       navigate("/");
     }
-  }, []);
+  }, [navigate]);
   const submitForm = (data) => {
     axios
       .post("http://localhost:3001/users/auth/registration", data)

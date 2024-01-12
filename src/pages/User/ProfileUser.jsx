@@ -78,22 +78,26 @@ function ProfileUser() {
   };
   useEffect(() => {
     const loggedIn = localStorage.getItem("accessToken");
-    axios
-      .get(`http://localhost:3001/users/${id}/`, {
-        headers: {
-          "X-ACCESS-TOKEN": loggedIn,
-        },
-      })
-      .then((response) => {
-        if (Object.keys(response.data.data).length === 0) {
-          navigate("/");
-        }
-        setUser(response.data.data);
-        Object.keys(response.data.data).forEach((id, index) => {
-          let value = Object.values(response.data.data).at(index);
-          setValue(id, value);
+    if (!loggedIn) {
+      navigate("/login");
+    } else {
+      axios
+        .get(`http://localhost:3001/users/${id}/`, {
+          headers: {
+            "X-ACCESS-TOKEN": loggedIn,
+          },
+        })
+        .then((response) => {
+          if (Object.keys(response.data.data).length === 0) {
+            navigate("/");
+          }
+          setUser(response.data.data);
+          Object.keys(response.data.data).forEach((id, index) => {
+            let value = Object.values(response.data.data).at(index);
+            setValue(id, value);
+          });
         });
-      });
+    }
   }, [navigate, id]);
   const back = () => {
     navigate(`/user/${id}`);

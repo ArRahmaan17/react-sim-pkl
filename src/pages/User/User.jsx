@@ -8,18 +8,22 @@ function User() {
   const [user, setUser] = useState({});
   useEffect(() => {
     const loggedIn = localStorage.getItem("accessToken");
-    axios
-      .get(`http://localhost:3001/users/${id}/`, {
-        headers: {
-          "X-ACCESS-TOKEN": loggedIn,
-        },
-      })
-      .then((response) => {
-        if (Object.keys(response.data.data).length === 0) {
-          navigate("/");
-        }
-        setUser(response.data.data);
-      });
+    if (!loggedIn) {
+      navigate("/login");
+    } else {
+      axios
+        .get(`http://localhost:3001/users/${id}/`, {
+          headers: {
+            "X-ACCESS-TOKEN": loggedIn,
+          },
+        })
+        .then((response) => {
+          if (Object.keys(response.data.data).length === 0) {
+            navigate("/");
+          }
+          setUser(response.data.data);
+        });
+    }
   }, [id, navigate]);
   return (
     <>
