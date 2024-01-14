@@ -17,6 +17,7 @@ function Attendance() {
   const [username, setUsername] = useState("");
   const [id, setId] = useState("");
   const [error, setError] = useState(null);
+  const [status, setStatus] = useState(true);
   const loggedIn = localStorage.getItem("accessToken");
   useEffect(() => {
     if (!loggedIn) {
@@ -25,6 +26,16 @@ function Attendance() {
       const token = jwtDecode(localStorage.getItem("accessToken"));
       setUsername(token.username);
       setId(token.id);
+      axios
+        .get(`http://localhost:3001/users/attendance/${token.id}`, {
+          headers: { "X-ACCESS-TOKEN": loggedIn },
+        })
+        .then((response) => {
+          setStatus(true);
+        })
+        .catch((response) => {
+          setStatus(false);
+        });
       if (!navigator.geolocation) {
         setError("Cant Get Your Current Location");
         return;
@@ -142,10 +153,18 @@ function Attendance() {
                   <option disabled value="">
                     Please Select An Option
                   </option>
-                  <option value="IN">IN</option>
-                  <option value="SICK">SICK</option>
-                  <option value="ABSENT">ABSENT</option>
-                  <option value="OUT">OUT</option>
+                  <option disabled={status ? true : false} value="IN">
+                    IN
+                  </option>
+                  <option disabled={status ? true : false} value="SICK">
+                    SICK
+                  </option>
+                  <option disabled={status ? true : false} value="ABSENT">
+                    ABSENT
+                  </option>
+                  <option disabled={status ? false : true} value="OUT">
+                    OUT
+                  </option>
                 </Field>
                 <ErrorMessage
                   name="status"
