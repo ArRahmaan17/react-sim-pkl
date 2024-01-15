@@ -45,14 +45,14 @@ function ProfileUser() {
   } = user;
   const formik = useFormik({
     initialValues: {
-      first_name: first_name,
-      last_name: last_name,
-      username: username,
-      email: email,
-      phone_number: phone_number,
-      password: password,
-      address: address,
-      profile_picture: profile_picture,
+      first_name: first_name ?? "",
+      last_name: last_name ?? "",
+      username: username ?? "",
+      email: email ?? "",
+      phone_number: phone_number ?? "",
+      password: password ?? "",
+      address: address ?? "",
+      profile_picture: profile_picture ?? "",
     },
     validationSchema: validationSchema,
     validateOnChange: false,
@@ -125,7 +125,7 @@ function ProfileUser() {
                     e.currentTarget.value ?? first_name
                   );
                 }}
-                value={first_name ?? ""}
+                value={first_name}
               />
               {formik.errors.first_name && (
                 <span className="invalid">{formik.errors.first_name}</span>
@@ -145,7 +145,7 @@ function ProfileUser() {
                     e.currentTarget.value ?? last_name
                   );
                 }}
-                value={last_name ?? ""}
+                value={last_name}
               />
               {formik.errors.last_name && (
                 <span className="invalid">{formik.errors.last_name}</span>
@@ -165,7 +165,7 @@ function ProfileUser() {
                     e.currentTarget.value ?? username
                   );
                 }}
-                value={username ?? ""}
+                value={username}
               />
               {formik.errors.username && (
                 <span className="invalid">{formik.errors.username}</span>
@@ -182,7 +182,7 @@ function ProfileUser() {
                 onChange={(e) => {
                   formik.setFieldValue("email", e.currentTarget.value ?? email);
                 }}
-                value={email ?? ""}
+                value={email}
               />
               {formik.errors.email && (
                 <span className="invalid">{formik.errors.email}</span>
@@ -202,7 +202,7 @@ function ProfileUser() {
                     e.currentTarget.value ?? phone_number
                   );
                 }}
-                value={phone_number ?? ""}
+                value={phone_number}
               />
               {formik.errors.phone_number && (
                 <span className="invalid">{formik.errors.phone_number}</span>
@@ -218,7 +218,7 @@ function ProfileUser() {
                 onChange={(e) => {
                   formik.setFieldValue("address", e.currentTarget.value);
                 }}
-                value={address ?? ""}
+                value={address}
               ></textarea>
               {formik.errors.address && (
                 <span className="invalid">{formik.errors.address}</span>

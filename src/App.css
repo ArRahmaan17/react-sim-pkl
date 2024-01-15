@@ -11,9 +11,8 @@
   color: #fff;
   background-color: rgba(42, 177, 230, 0.774);
   display: block;
-  /* border: .2rem solid black; */
-  height: 100vh;
   min-height: 100vh;
+  height: 100%;
   width: 15%;
   min-width: 15%;
   box-shadow: .3rem .1rem 1.1rem rgba(135, 206, 235, .5);

@@ -15,7 +15,7 @@ function CreateUser() {
   }, [navigate]);
   const submitForm = (data) => {
     axios
-      .post("http://localhost:3001/users/auth/registration", data)
+      .post("http://localhost:3001/auth/registration", data)
       .then((response) => {
         navigate("/");
       });

@@ -20,6 +20,9 @@ function All() {
         })
         .then((response) => {
           setUsers(response.data.data);
+        })
+        .catch((error) => {
+          setUsers(error.response.data.data);
         });
     }
   }, [navigate]);

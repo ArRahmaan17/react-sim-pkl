@@ -10,6 +10,9 @@ export default function Root() {
       <Link className="sidebar-item" to="/attendance">
         Attendance
       </Link>
+      <Link className="sidebar-item" to="/mentor/task">
+        Task
+      </Link>
       <Link className="sidebar-item" to="/create-user">
         Create User
       </Link>
