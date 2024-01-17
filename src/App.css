@@ -131,6 +131,15 @@ textarea.form-control {
   padding: 0;
 }
 
+.dropzone {
+  padding: 30px;
+  border: 2px dashed #aaa;
+  border-radius: 10px;
+  transition: border 0.3s ease-in-out;
+  text-align: center;
+  font-weight: bold;
+}
+
 .form-control>.invalid {
   margin-bottom: 0;
 }
@@ -207,6 +216,32 @@ textarea.form-control {
   gap: .3rem;
   justify-content: flex-end;
   border-radius: 0 0 0.375rem 0.375rem;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.img-thumbnail {
+  width: 100%;
+  object-fit: cover;
+  max-height: 20vw;
+  min-height: 5vw;
+  border-radius: 5px;
+}
+
+.task-title {
+  font-size: 3rem;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-transform: capitalize;
+  margin-bottom: 10px;
+}
+
+.task-content {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 10px;
 }
 
 .btn-group {

@@ -174,7 +174,13 @@ function Attendance() {
                 <label className="label" htmlFor="">
                   Photo
                 </label>
-                <Webcam ref={ref} className="camera-stream" alt="camera" />
+                <Webcam
+                  ref={ref}
+                  screenshotFormat="image/jpeg"
+                  className="camera-stream"
+                  alt="camera"
+                  mirrored={true}
+                />
                 <img
                   className="camera-stream"
                   src={img}

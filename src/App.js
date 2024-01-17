@@ -7,6 +7,8 @@ import ProfileUser from './pages/User/ProfileUser';
 import Attendance from './pages/Attendance/Attendance';
 import Login from './pages/Auth/Login';
 import Tasks from './pages/Mentor/Tasks';
+import CreateTask from './pages/Mentor/CreateTask';
+import Task from './pages/Mentor/Task';
 
 const router = createBrowserRouter([
   {
@@ -51,7 +53,9 @@ function Root() {
       <Route path='/user/:id' exact Component={User} />
       <Route path='/user/:id/update' exact Component={ProfileUser} />
       <Route path='/attendance' exact Component={Attendance} />
+      <Route path='/mentor/create-task' exact Component={CreateTask} />
       <Route path='/mentor/task' exact Component={Tasks} />
+      <Route path='/mentor/task/:id' exact Component={Task} />
       <Route path='/login' exact Component={Login} />
     </Routes>);
 }
