@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from "react";
 import Root from "../../routes/Root";
 import axios from "axios";
-import DOMPurify from "dompurify";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 function Tasks() {
   let loggedIn = localStorage.getItem("accessToken");
   let [tasks, setTasks] = useState([]);
   const navigate = useNavigate();
+  const createTasks = () => {
+    navigate("/mentor/create-task");
+  };
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/mentor/task", {
-        headers: { "X-Access-Token": loggedIn },
-      })
-      .then((response) => {
-        setTasks(response.data.data);
-      })
-      .catch((error) => {});
+    if (loggedIn) {
+      axios
+        .get("http://localhost:3001/mentor/task", {
+          headers: { "X-Access-Token": loggedIn },
+        })
+        .then((response) => {
+          setTasks(response.data.data);
+        })
+        .catch((error) => {});
+    } else {
+      navigate("login");
+    }
   }, []);
   return (
     <>
@@ -23,7 +30,9 @@ function Tasks() {
       <div className="main-content">
         <div className="card">
           <div className="card-footer">
-            <button className="btn btn-success">Create Task</button>
+            <button className="btn btn-success" onClick={createTasks}>
+              Create Task
+            </button>
           </div>
         </div>
         {tasks &&
@@ -42,14 +51,11 @@ function Tasks() {
                   className="img-thumbnail"
                 />
                 <div className="card-title">{task.title}</div>
-                {/* <div
-                  className="content"
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(task.content),
-                  }}
-                ></div> */}
               </div>
-              <div className="card-footer">Title</div>
+              <div className="card-footer">
+                {moment(task.createdAt).format("LLL")} by{" "}
+                {task.user.first_name ?? task.user.username}
+              </div>
             </div>
           ))}
       </div>

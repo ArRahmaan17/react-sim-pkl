@@ -55,6 +55,9 @@ function CreateTask() {
   };
 
   const handleChangeStartDate = (date) => {
+    console.log(
+      moment(new Date(date).toISOString()).diff(moment().utcOffset(7), "days")
+    );
     if (
       moment(new Date(date).toISOString()).diff(
         moment().utcOffset(7),
@@ -106,7 +109,7 @@ function CreateTask() {
         },
       })
       .then((response) => {
-        navigate("/");
+        navigate("/mentor/task");
       })
       .catch((error) => {});
   };

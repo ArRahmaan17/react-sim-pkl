@@ -124,6 +124,34 @@ textarea.form-control {
   margin-bottom: .3rem;
 }
 
+.comment-section {
+  margin-top: 10px;
+  padding: 10px 0;
+}
+
+.comment-container {
+  margin-bottom: 1rem;
+}
+
+.comment {
+  padding: 5px 10px;
+  box-sizing: border-box;
+  border-bottom: .1px solid #000;
+  margin-top: 5px;
+}
+
+.comment-content {
+  color: #333;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.comment-reaction {
+  display: flex;
+  gap: 5px;
+}
+
 .camera-stream {
   display: block;
   margin: .3rem 0;
@@ -138,6 +166,11 @@ textarea.form-control {
   transition: border 0.3s ease-in-out;
   text-align: center;
   font-weight: bold;
+}
+
+.comment-username {
+  font-size: .9rem;
+  font-weight: 600;
 }
 
 .form-control>.invalid {
@@ -162,6 +195,11 @@ textarea.form-control {
   cursor: pointer;
   border-radius: .375rem;
   border: 0;
+  margin: 5px 0px;
+}
+
+.comment-section {
+  margin: 0px 20px;
 }
 
 .btn-success {
@@ -228,10 +266,19 @@ textarea.form-control {
   max-height: 20vw;
   min-height: 5vw;
   border-radius: 5px;
+  cursor: pointer;
+}
+
+.img-thumbnail-detail {
+  width: 100%;
+  object-fit: cover;
+  max-height: 20vw;
+  min-height: 5vw;
+  border-radius: 5px 5px 0px 0px;
 }
 
 .task-title {
-  font-size: 3rem;
+  font-size: 2.5rem;
   padding-left: 10px;
   padding-right: 10px;
   text-transform: capitalize;
