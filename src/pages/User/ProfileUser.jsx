@@ -22,7 +22,6 @@ function ProfileUser() {
     username: Yub.string().min(5).max(15).required(),
     email: Yub.string().email().required(),
     phone_number: Yub.string().min(11).max(13).required(),
-    password: Yub.string().min(7).max(15).required(),
     address: Yub.string().min(15).max(255).required(),
     profile_picture: Yub.mixed()
       .nullable(true)
@@ -40,7 +39,6 @@ function ProfileUser() {
     username,
     email,
     phone_number,
-    password,
     address,
     profile_picture,
   } = user;
@@ -51,7 +49,6 @@ function ProfileUser() {
       username: username ?? "",
       email: email ?? "",
       phone_number: phone_number ?? "",
-      password: password ?? "",
       address: address ?? "",
       profile_picture: profile_picture ?? "",
     },
@@ -226,20 +223,6 @@ function ProfileUser() {
               ></textarea>
               {formik.errors.address && (
                 <span className="invalid">{formik.errors.address}</span>
-              )}
-              <label className="label" htmlFor="password">
-                Password
-              </label>
-              <input
-                autoComplete="off"
-                className="form-control"
-                type="password"
-                id="password"
-                name="password"
-                value={password}
-              />
-              {formik.errors.password && (
-                <span className="invalid">{formik.errors.password}</span>
               )}
               <label className="label" htmlFor="profile_picture">
                 Profile Picture : {profile_picture}

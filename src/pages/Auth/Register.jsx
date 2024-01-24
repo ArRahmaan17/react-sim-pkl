@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yub from "yup";
 import axios from "axios";
@@ -7,6 +7,7 @@ import Root from "../../routes/Root";
 
 function CreateUser() {
   let navigate = useNavigate();
+  let [errorMessage, setErrorMessage] = useState("");
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
@@ -18,6 +19,9 @@ function CreateUser() {
       .post("http://localhost:3001/auth/registration", data)
       .then((response) => {
         navigate("/");
+      })
+      .catch((error) => {
+        setErrorMessage(error.response.data.errors[0].message);
       });
   };
   const validationSchema = Yub.object().shape({
@@ -35,6 +39,7 @@ function CreateUser() {
       <div className="main-content">
         <div className="card">
           <div className="card-body">
+            <div className="invalid">{errorMessage}</div>
             <Formik
               onSubmit={submitForm}
               initialValues={{

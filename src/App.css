@@ -159,6 +159,10 @@ textarea.form-control {
   padding: 0;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .dropzone {
   padding: 30px;
   border: 2px dashed #aaa;

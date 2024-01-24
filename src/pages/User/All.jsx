@@ -34,7 +34,7 @@ function All() {
           return (
             <div
               key={value.id}
-              className="card"
+              className="card pointer"
               onClick={() => {
                 navigate(`/user/${value.id}`);
               }}

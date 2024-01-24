@@ -120,15 +120,13 @@ function CreateTask() {
       updateFiles(e.target.result);
     };
     return (
-      <>
-        <img
-          key={file.path}
-          className="camera-stream"
-          width="20%"
-          src={files}
-          alt=""
-        />
-      </>
+      <img
+        key={index}
+        className="camera-stream"
+        width="20%"
+        src={files}
+        alt=""
+      />
     );
   });
   const fileRejectionsItems = fileRejections.map(({ file, errors }) => (

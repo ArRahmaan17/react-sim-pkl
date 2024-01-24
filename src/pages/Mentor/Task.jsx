@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Root from "../../routes/Root";
 import DOMPurify from "dompurify";
+import moment from "moment";
 
 function Task() {
   const { id } = useParams("id");
@@ -102,6 +103,9 @@ function Task() {
                         by {comment.user.username}
                       </div>
                       {comment.content}
+                      <div className="comment-username">
+                        {moment(comment.createdAt).fromNow()}
+                      </div>
                     </div>
                   </div>
                 ))}
