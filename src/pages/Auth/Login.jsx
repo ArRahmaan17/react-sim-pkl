@@ -4,6 +4,10 @@ import { Form, Field, Formik, ErrorMessage } from "formik";
 import * as Yub from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { FloatingLabel } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
+
 function Login() {
   let navigate = useNavigate();
   useEffect(() => {
@@ -45,31 +49,33 @@ function Login() {
               validationSchema={validationSchema}
             >
               <Form>
-                <label htmlFor="username" className="label">
-                  Username
-                </label>
-                <Field id="username" name="username" className="form-control" />
+                <FloatingLabel label="username">
+                  <Field
+                    id="username"
+                    name="username"
+                    className="form-control"
+                  />
+                </FloatingLabel>
                 <ErrorMessage
                   component="span"
                   className="invalid"
                   name="username"
                 />
-                <label htmlFor="password" className="label">
-                  Password
-                </label>
-                <Field
-                  id="password"
-                  type="password"
-                  name="password"
-                  className="form-control"
-                />
+                <FloatingLabel label="password">
+                  <Field
+                    id="password"
+                    type="password"
+                    name="password"
+                    className="form-control"
+                  />
+                </FloatingLabel>
                 <ErrorMessage
                   component="span"
                   className="invalid"
                   name="password"
                 />
                 <button type="submit" className="btn btn-success">
-                  Login
+                  <FontAwesomeIcon icon={faArrowRightToBracket} /> Login
                 </button>
               </Form>
             </Formik>

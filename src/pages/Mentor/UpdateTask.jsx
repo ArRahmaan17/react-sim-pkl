@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Field, ErrorMessage, Formik, Form } from "formik";
 import moment from "moment";
 import "rmc-picker/assets/index.css";
@@ -16,9 +16,35 @@ import Root from "../../routes/Root";
 import { useDropzone } from "react-dropzone";
 import * as Yub from "yup";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-function CreateTask() {
+function UpdateTask() {
+  const [model, setModel] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+  const [status, setStatus] = useState("");
+  const [title, setTitle] = useState("");
+  const [endDate, setEndDate] = useState(null);
+  const [files, setFiles] = useState("");
+  const loggedIn = localStorage.getItem("accessToken");
+  const [task, setTask] = useState({});
+  const updateFiles = (incomingFiles) => {
+    setFiles(incomingFiles);
+  };
+  let { id } = useParams("id");
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/mentor/task/${id}`, {
+        headers: { "X-Access-Token": loggedIn },
+      })
+      .then((response) => {
+        setTask(response.data.data);
+        setModel(response.data.data.content);
+        console.log(new Date(response.data.data.start_date));
+        console.log(new Date(response.data.data.deadline_date));
+        setStartDate(new Date(response.data.data.start_date));
+        setEndDate(new Date(response.data.data.deadline_date));
+      });
+  }, []);
   const fileSize = (file) => {
     if (file.size > 100000) {
       return {
@@ -34,85 +60,6 @@ function CreateTask() {
       maxFiles: 1,
       validator: fileSize,
     });
-  const navigate = useNavigate();
-  const [model, setModel] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
-  const [status, setStatus] = useState("");
-  const [title, setTitle] = useState("");
-  const [endDate, setEndDate] = useState(null);
-  const [files, setFiles] = useState("");
-  const loggedIn = localStorage.getItem("accessToken");
-
-  const config = {
-    placeholderText: "Edit Your Content Here!",
-    charCounterCount: true,
-  };
-  const handleChange = (event) => {
-    setModel(event);
-  };
-  const handleTitleChange = (e) => {
-    setTitle(e.currentTarget.value);
-  };
-
-  const handleChangeStartDate = (date) => {
-    console.log(
-      moment(new Date(date).toISOString()).diff(moment().utcOffset(7), "days")
-    );
-    if (
-      moment(new Date(date).toISOString()).diff(
-        moment().utcOffset(7),
-        "days"
-      ) <= 0
-    ) {
-      setStatus("Start");
-    } else {
-      setStatus("Pending");
-    }
-    setStartDate(date);
-    setEndDate(date);
-  };
-  const handleChangeEndDate = (date) => {
-    if (
-      moment(new Date(date).toISOString()).diff(
-        moment().utcOffset(7),
-        "days"
-      ) <= 0
-    ) {
-      setStatus("Start");
-    } else {
-      setStatus("Pending");
-    }
-    setEndDate(date);
-  };
-  const updateFiles = (incomingFiles) => {
-    setFiles(incomingFiles);
-  };
-  const initialValues = {
-    status: status,
-    title: title,
-  };
-
-  const validationSchema = Yub.object().shape({
-    status: Yub.string().required(),
-    title: Yub.string().max(100).required(),
-  });
-
-  const taskSubmit = (data) => {
-    data.thumbnail = files;
-    data.content = model;
-    data.start_date = moment(startDate).format("Y-M-D");
-    data.deadline_date = moment(endDate).format("Y-M-D");
-    axios
-      .post("http://localhost:3001/mentor/task/create", data, {
-        headers: {
-          "X-ACCESS-TOKEN": loggedIn,
-        },
-      })
-      .then((response) => {
-        navigate("/mentor/task");
-      })
-      .catch((error) => {});
-  };
   const acceptedFileItems = acceptedFiles.map((file, index) => {
     let reader = new FileReader();
     reader.readAsDataURL(file);
@@ -122,7 +69,7 @@ function CreateTask() {
     return (
       <img
         key={index}
-        className="camera-stream"
+        className="img-thumbnail"
         width="20%"
         src={files}
         alt=""
@@ -137,6 +84,50 @@ function CreateTask() {
       ))}
     </ul>
   ));
+  const taskSubmit = (data) => {
+    console.log(data, startDate, endDate);
+  };
+  const initialValues = {
+    status: task.status,
+    title: task.title,
+  };
+  const handleChangeContent = (event) => {
+    setModel(event);
+  };
+  const validationSchema = Yub.object().shape({
+    status: Yub.string().required(),
+    title: Yub.string().max(100).required(),
+  });
+  const config = {
+    placeholderText: "Edit Your Content Here!",
+    charCounterCount: true,
+  };
+  const handleChangeEndDate = (date) => {
+    if (
+      moment(new Date(date).toISOString()).diff(
+        moment().utcOffset(7),
+        "days"
+      ) <= 0
+    ) {
+      setStatus("Start");
+    } else {
+      setStatus("Pending");
+    }
+    setEndDate(new Date(date));
+  };
+  const handleChangeStartDate = (date) => {
+    if (
+      moment(new Date(date).toISOString()).diff(
+        moment().utcOffset(7),
+        "days"
+      ) <= 0
+    ) {
+      setStatus("Start");
+    } else {
+      setStatus("Pending");
+    }
+    setStartDate(new Date(date));
+  };
   return (
     <>
       <Root />
@@ -154,12 +145,7 @@ function CreateTask() {
                 <label htmlFor="title" className="label">
                   Title
                 </label>
-                <Field
-                  name="title"
-                  id="title"
-                  className="form-control"
-                  onChange={handleTitleChange}
-                />
+                <Field name="title" id="title" className="form-control" />
                 <ErrorMessage
                   name="title"
                   component="span"
@@ -172,14 +158,14 @@ function CreateTask() {
                   tag="textarea"
                   config={config}
                   model={model}
-                  onModelChange={handleChange}
+                  onModelChange={handleChangeContent}
                 />
                 <label htmlFor="" className="label">
                   Start Date
                 </label>
                 <DatePicker
-                  defaultDate={startDate || new Date()}
-                  minDate={new Date(2023, 11, 1)}
+                  defaultDate={startDate}
+                  minDate={startDate}
                   maxDate={new Date(2024, 1, 29)}
                   onDateChange={handleChangeStartDate}
                 />
@@ -187,8 +173,8 @@ function CreateTask() {
                   Deadline Date
                 </label>
                 <DatePicker
-                  defaultDate={endDate || new Date()}
-                  minDate={startDate || new Date()}
+                  defaultDate={endDate}
+                  minDate={startDate}
                   maxDate={new Date(2024, 1, 29)}
                   onDateChange={handleChangeEndDate}
                 />
@@ -206,6 +192,13 @@ function CreateTask() {
                     <div className="d-flex">{fileRejectionsItems}</div>
                   </aside>
                 </div>
+                {acceptedFiles.length === 0 && (
+                  <img
+                    src={"http://127.0.0.1:3001/" + task.thumbnail}
+                    className="img-thumbnail"
+                    alt={task.thumbnail}
+                  />
+                )}
                 <label htmlFor="status" className="label">
                   Status
                 </label>
@@ -213,7 +206,7 @@ function CreateTask() {
                   name="status"
                   id="status"
                   readOnly={true}
-                  value={status || ""}
+                  value={task.status}
                   className="form-control"
                 />
                 <ErrorMessage
@@ -221,8 +214,8 @@ function CreateTask() {
                   component="span"
                   className="invalid"
                 />
-                <button type="submit" className="btn btn-success mt-3">
-                  Create Task
+                <button type="submit" className="btn btn-warning mt-3">
+                  Update Task
                 </button>
               </Form>
             </Formik>
@@ -233,4 +226,4 @@ function CreateTask() {
   );
 }
 
-export default CreateTask;
+export default UpdateTask;

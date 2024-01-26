@@ -4,6 +4,16 @@ import { useParams, useNavigate } from "react-router-dom";
 import Root from "../../routes/Root";
 import DOMPurify from "dompurify";
 import moment from "moment";
+import {
+  Button,
+  Modal,
+  FloatingLabel,
+  Form,
+  ListGroup,
+  Card,
+} from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft, faComment } from "@fortawesome/free-solid-svg-icons";
 
 function Task() {
   const { id } = useParams("id");
@@ -12,6 +22,9 @@ function Task() {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const loggedIn = localStorage.getItem("accessToken");
+  const [openModal, setOpenModal] = useState(false);
+  const showModal = () => setOpenModal(true);
+  const hideModal = () => setOpenModal(false);
   const commentSubmit = () => {
     if (comment.length < 1) {
       return;
@@ -37,7 +50,9 @@ function Task() {
           setTask(response.data.data);
           setComments(response.data.data.tasks_comments);
         })
-        .catch((error) => {});
+        .catch((error) => {
+          navigate("/mentor/task");
+        });
     } else {
       navigate("/login");
     }
@@ -54,7 +69,7 @@ function Task() {
                 navigate("/mentor/task");
               }}
             >
-              Back
+              <FontAwesomeIcon icon={faArrowLeft} /> Back
             </button>
           </div>
         </div>
@@ -71,48 +86,77 @@ function Task() {
               __html: DOMPurify.sanitize(task.content),
             }}
           ></div>
+          <Button variant="primary" onClick={showModal}>
+            Update
+          </Button>
           <hr />
           <div className="comment-section">
-            <textarea
-              name="content"
-              className="form-control"
-              onChange={(e) => {
-                setComment(e.currentTarget.value);
-              }}
-              placeholder={
+            <FloatingLabel
+              controlId="floatingTextarea2"
+              label={
                 comments && comments.length > 0
                   ? "add your comment for this task"
                   : "be first commenter at this task"
               }
-              value={comment}
-            ></textarea>
+            >
+              <Form.Control
+                name="content"
+                as="textarea"
+                onChange={(e) => {
+                  setComment(e.currentTarget.value);
+                }}
+                placeholder={
+                  comments && comments.length > 0
+                    ? "add your comment for this task"
+                    : "be first commenter at this task"
+                }
+                style={{ height: "100px" }}
+                value={comment}
+              />
+            </FloatingLabel>
             <button
               type="submit"
-              className="btn btn-success"
+              className="btn btn-success mt-3"
               onClick={commentSubmit}
             >
-              Send
+              <FontAwesomeIcon icon={faComment} /> Send
             </button>
             <hr />
             <div className="comment-container">
               {comments &&
                 comments.map((comment, key) => (
-                  <div className="comment" key={key}>
-                    <div className="comment-content" key={comment.id}>
-                      <div className="comment-username">
-                        by {comment.user.username}
-                      </div>
-                      {comment.content}
-                      <div className="comment-username">
-                        {moment(comment.createdAt).fromNow()}
-                      </div>
-                    </div>
-                  </div>
+                  <Card className="mb-2" key={key}>
+                    <Card.Body>
+                      <blockquote className="blockquote mb-0">
+                        <p>{comment.content}</p>
+                        <footer className="blockquote-footer">
+                          {moment(comment.createdAt).fromNow()} by
+                          <cite title="Source Title">
+                            {comment.user.username}
+                          </cite>
+                        </footer>
+                      </blockquote>
+                    </Card.Body>
+                  </Card>
                 ))}
             </div>
           </div>
         </div>
       </div>
+      <Modal show={openModal} onHide={hideModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={hideModal}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={hideModal}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

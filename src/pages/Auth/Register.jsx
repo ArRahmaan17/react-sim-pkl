@@ -4,6 +4,9 @@ import * as Yub from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Root from "../../routes/Root";
+import { FloatingLabel } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 
 function CreateUser() {
   let navigate = useNavigate();
@@ -51,64 +54,68 @@ function CreateUser() {
               validationSchema={validationSchema}
             >
               <Form>
-                <label className="label">Username</label>
-                <Field
-                  autoComplete="off"
-                  className="form-control"
-                  type="text"
-                  id="username"
-                  placeholder="john"
-                  name="username"
-                />
+                <FloatingLabel label="Username">
+                  <Field
+                    autoComplete="off"
+                    className="form-control"
+                    type="text"
+                    id="username"
+                    placeholder="john"
+                    name="username"
+                  />
+                </FloatingLabel>
                 <ErrorMessage
                   className="invalid"
                   component="span"
                   name="username"
                 />
-                <label className="label">Email</label>
-                <Field
-                  autoComplete="off"
-                  className="form-control"
-                  type="email"
-                  id="email"
-                  placeholder="john@jhon.com"
-                  name="email"
-                />
+                <FloatingLabel label="Email">
+                  <Field
+                    autoComplete="off"
+                    className="form-control"
+                    type="email"
+                    id="email"
+                    placeholder="john@jhon.com"
+                    name="email"
+                  />
+                </FloatingLabel>
                 <ErrorMessage
                   className="invalid"
                   name="email"
                   component="span"
                 />
-                <label className="label">Phone Number</label>
-                <Field
-                  autoComplete="off"
-                  className="form-control"
-                  type="text"
-                  id="phone_number"
-                  placeholder="890-31...."
-                  name="phone_number"
-                />
+                <FloatingLabel label="Phone Number">
+                  <Field
+                    autoComplete="off"
+                    className="form-control"
+                    type="text"
+                    id="phone_number"
+                    placeholder="890-31...."
+                    name="phone_number"
+                  />
+                </FloatingLabel>
                 <ErrorMessage
                   className="invalid"
                   name="phone_number"
                   component="span"
                 />
-                <label className="label">Password</label>
-                <Field
-                  autoComplete="off"
-                  className="form-control"
-                  type="password"
-                  id="password"
-                  placeholder="password"
-                  name="password"
-                />
+                <FloatingLabel label="Password">
+                  <Field
+                    autoComplete="off"
+                    className="form-control"
+                    type="password"
+                    id="password"
+                    placeholder="password"
+                    name="password"
+                  />
+                </FloatingLabel>
                 <ErrorMessage
                   className="invalid"
                   name="password"
                   component="span"
                 />
                 <button className="btn btn-success" type="submit">
-                  Create User
+                  <FontAwesomeIcon icon={faUserPlus} /> Create User
                 </button>
               </Form>
             </Formik>

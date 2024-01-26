@@ -6,6 +6,13 @@ import * as Yub from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { FloatingLabel } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCamera,
+  faFingerprint,
+  faRotateRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 function Attendance() {
   const navigate = useNavigate();
@@ -126,46 +133,44 @@ function Attendance() {
                   readOnly
                   type="hidden"
                 />
-                <label className="label" htmlFor="username">
-                  Username
-                </label>
-                <Field
-                  name="username"
-                  id="username"
-                  className="form-control"
-                  readOnly
-                />
+                <FloatingLabel label="Username">
+                  <Field
+                    name="username"
+                    id="username"
+                    className="form-control"
+                    readOnly
+                  />
+                </FloatingLabel>
                 <ErrorMessage
                   name="username"
                   component="span"
                   className="invalid"
                 />
-                <label className="label" htmlFor="status">
-                  Status
-                </label>
-                <Field
-                  autoComplete="off"
-                  as="select"
-                  id="status"
-                  name="status"
-                  className="form-control-select"
-                >
-                  <option disabled value="">
-                    Please Select An Option
-                  </option>
-                  <option disabled={status ? true : false} value="IN">
-                    IN
-                  </option>
-                  <option disabled={status ? true : false} value="SICK">
-                    SICK
-                  </option>
-                  <option disabled={status ? true : false} value="ABSENT">
-                    ABSENT
-                  </option>
-                  <option disabled={status ? false : true} value="OUT">
-                    OUT
-                  </option>
-                </Field>
+                <FloatingLabel label="status">
+                  <Field
+                    autoComplete="off"
+                    as="select"
+                    id="status"
+                    name="status"
+                    className="form-control"
+                  >
+                    <option disabled value="">
+                      Please Select An Option
+                    </option>
+                    <option disabled={status ? true : false} value="IN">
+                      IN
+                    </option>
+                    <option disabled={status ? true : false} value="SICK">
+                      SICK
+                    </option>
+                    <option disabled={status ? true : false} value="ABSENT">
+                      ABSENT
+                    </option>
+                    <option disabled={status ? false : true} value="OUT">
+                      OUT
+                    </option>
+                  </Field>
+                </FloatingLabel>
                 <ErrorMessage
                   name="status"
                   component="span"
@@ -213,6 +218,10 @@ function Attendance() {
                       capture();
                     }}
                   >
+                    <FontAwesomeIcon
+                      icon={faCamera}
+                      style={{ color: "#fcfdfd" }}
+                    />{" "}
                     Capture
                   </button>
                   <button
@@ -222,12 +231,10 @@ function Attendance() {
                       reload();
                     }}
                   >
-                    Reload
+                    <FontAwesomeIcon icon={faRotateRight} /> Reload
                   </button>
-                </div>
-                <div className="btn-group">
                   <button type="submit" className="btn btn-success">
-                    Attendance
+                    <FontAwesomeIcon icon={faFingerprint} /> Attendance
                   </button>
                 </div>
               </Form>
