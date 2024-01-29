@@ -53,12 +53,13 @@ function Login() {
                   <Field
                     id="username"
                     name="username"
-                    className="form-control"
+                    className="form-control mb-1"
+                    placeholder="Username"
                   />
                 </FloatingLabel>
                 <ErrorMessage
                   component="span"
-                  className="invalid"
+                  className="invalid mb-1"
                   name="username"
                 />
                 <FloatingLabel label="password">
@@ -66,15 +67,16 @@ function Login() {
                     id="password"
                     type="password"
                     name="password"
-                    className="form-control"
+                    className="form-control mb-1"
+                    placeholder="password"
                   />
                 </FloatingLabel>
                 <ErrorMessage
                   component="span"
-                  className="invalid"
+                  className="invalid mb-1"
                   name="password"
                 />
-                <button type="submit" className="btn btn-success">
+                <button type="submit" className="btn btn-success mt-2">
                   <FontAwesomeIcon icon={faArrowRightToBracket} /> Login
                 </button>
               </Form>

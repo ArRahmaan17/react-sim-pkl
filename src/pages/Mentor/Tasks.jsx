@@ -59,22 +59,24 @@ function Tasks() {
                 </div>
               </div>
               <div className="card-footer">
-                <button
-                  className="btn btn-warning btn-sm"
-                  onClick={() => {
-                    navigate(`/mentor/task/${task.id}/update`);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faPen} /> Update
-                </button>
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() => {
-                    navigate(`/mentor/task/${task.id}/update`);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faTrash} /> Delete
-                </button>{" "}
+                <div className="d-flex">
+                  <button
+                    className="btn btn-warning btn-sm mx-1"
+                    onClick={() => {
+                      navigate(`/mentor/task/${task.id}/update`);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faPen} /> Update
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm mx-1"
+                    onClick={() => {
+                      navigate(`/mentor/task/${task.id}/update`);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faTrash} /> Delete
+                  </button>
+                </div>{" "}
                 {moment(task.createdAt).format("LLL")} by{" "}
                 {task.user.first_name ?? task.user.username}
               </div>

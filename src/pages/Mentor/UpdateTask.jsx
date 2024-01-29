@@ -86,7 +86,7 @@ function UpdateTask() {
     </ul>
   ));
   const taskSubmit = (data) => {
-    if (status == "End") {
+    if (status === "End") {
       toast.error(
         "Your update not effected to the task because task is already ended"
       );
@@ -95,7 +95,7 @@ function UpdateTask() {
     data.deadline_date = moment(endDate).format("Y-M-D");
     data.content = model;
     data.status = status;
-    if (files != "") {
+    if (files !== "") {
       data.thumbnail = files;
     }
     console.log(data);

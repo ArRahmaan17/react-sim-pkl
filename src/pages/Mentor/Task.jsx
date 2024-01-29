@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Root from "../../routes/Root";
 import DOMPurify from "dompurify";
 import moment from "moment";
+import { Toaster, toast } from "alert";
 import {
   Button,
   Modal,
@@ -11,9 +12,17 @@ import {
   Form,
   ListGroup,
   Card,
+  Form as FormBootstrap,
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faComment } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faComment,
+  faComments,
+  faTimeline,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { jwtDecode } from "jwt-decode";
 
 function Task() {
   const { id } = useParams("id");
@@ -25,6 +34,7 @@ function Task() {
   const [openModal, setOpenModal] = useState(false);
   const showModal = () => setOpenModal(true);
   const hideModal = () => setOpenModal(false);
+  const user = jwtDecode(loggedIn);
   const commentSubmit = () => {
     if (comment.length < 1) {
       return;
@@ -37,6 +47,7 @@ function Task() {
       .then((response) => {
         setComment("");
         setComments(response.data.data);
+        toast.success("Your comment added");
       });
   };
 
@@ -61,6 +72,7 @@ function Task() {
     <>
       <Root />
       <div className="main-content">
+        <Toaster position="bottom-right" duration={3500} reverse={true} />
         <div className="card">
           <div className="card-footer">
             <button
@@ -86,8 +98,8 @@ function Task() {
               __html: DOMPurify.sanitize(task.content),
             }}
           ></div>
-          <Button variant="primary" onClick={showModal}>
-            Update
+          <Button variant="primary" className="mx-3" onClick={showModal}>
+            <FontAwesomeIcon icon={faTimeline} /> Update Timeline Task
           </Button>
           <hr />
           <div className="comment-section">
@@ -119,19 +131,23 @@ function Task() {
               className="btn btn-success mt-3"
               onClick={commentSubmit}
             >
-              <FontAwesomeIcon icon={faComment} /> Send
+              <FontAwesomeIcon icon={faComments} /> Add Comment
             </button>
             <hr />
             <div className="comment-container">
               {comments &&
                 comments.map((comment, key) => (
-                  <Card className="mb-2" key={key}>
-                    <Card.Body>
+                  <Card className="mb-2 p-0" key={key}>
+                    <Card.Body className="py-1">
                       <blockquote className="blockquote mb-0">
-                        <p>{comment.content}</p>
-                        <footer className="blockquote-footer">
-                          {moment(comment.createdAt).fromNow()} by
+                        <p className="text-sm">
+                          <FontAwesomeIcon icon={faComments} />{" "}
+                          {comment.content}
+                        </p>
+                        <footer className="blockquote-footer text-sm">
+                          {moment(comment.createdAt).fromNow()} by{" "}
                           <cite title="Source Title">
+                            <FontAwesomeIcon icon={faUser} />{" "}
                             {comment.user.username}
                           </cite>
                         </footer>
@@ -143,11 +159,36 @@ function Task() {
           </div>
         </div>
       </div>
-      <Modal show={openModal} onHide={hideModal}>
+      <Modal
+        show={openModal}
+        onHide={hideModal}
+        backdrop="static"
+        keyboard={false}
+        size="lg"
+        centered
+      >
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Update your task timeline</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+        <Modal.Body>
+          <FormBootstrap>
+            <FloatingLabel label="Username" className="mb-3">
+              <FormBootstrap.Control
+                type="text"
+                placeholder="Username"
+                readOnly={true}
+                value={user.username}
+              />
+            </FloatingLabel>
+            <FloatingLabel label="Description" className="mb-3">
+              <FormBootstrap.Control
+                as="textarea"
+                placeholder="Description"
+                style={{ height: "100px" }}
+              />
+            </FloatingLabel>
+          </FormBootstrap>
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={hideModal}>
             Close
