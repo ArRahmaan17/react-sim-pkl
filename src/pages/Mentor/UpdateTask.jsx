@@ -23,7 +23,6 @@ function UpdateTask() {
   const [model, setModel] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [status, setStatus] = useState("");
-  const [title, setTitle] = useState("");
   const [endDate, setEndDate] = useState(null);
   const [files, setFiles] = useState("");
   const loggedIn = localStorage.getItem("accessToken");

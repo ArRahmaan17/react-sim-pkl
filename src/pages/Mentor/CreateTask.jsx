@@ -1,22 +1,23 @@
 import React, { useState } from "react";
 import { Field, ErrorMessage, Formik, Form } from "formik";
 import moment from "moment";
-import "rmc-picker/assets/index.css";
-import "rmc-date-picker/assets/index.css";
-import "rmc-picker/assets/popup.css";
+import "react-date-picker/dist/DatePicker.css";
+import "react-calendar/dist/Calendar.css";
 import "../../css/froala/froala_editor.min.css";
 import "../../css/froala/froala_editor.pkgd.min.css";
 import "../../css/froala/char_counter.min.css";
 import "../../js/froala/froala_editor.min.js";
 import "../../js/froala/froala_editor.pkgd.min.js";
 import "../../js/froala/plugins.pkgd.min.js";
-import DatePicker from "rmc-date-picker/lib/DatePicker.js";
+// import DatePicker from "rmc-date-picker/lib/DatePicker.js";
+import DatePicker from "react-date-picker";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 import Root from "../../routes/Root";
 import { useDropzone } from "react-dropzone";
 import * as Yub from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Toaster, toast } from "alert";
 
 function CreateTask() {
   const fileSize = (file) => {
@@ -73,16 +74,16 @@ function CreateTask() {
   };
   const handleChangeEndDate = (date) => {
     if (
-      moment(new Date(date).toISOString()).diff(
-        moment().utcOffset(7),
-        "days"
-      ) <= 0
+      moment(new Date(date).toISOString()).diff(moment().utcOffset(7), "days") <
+      0
     ) {
-      setStatus("Start");
-    } else {
+      setStatus("End");
+    } else if (moment(startDate).diff(moment(), "days") > 0) {
       setStatus("Pending");
+    } else {
+      setStatus("Start");
     }
-    setEndDate(date);
+    setEndDate(new Date(date));
   };
   const updateFiles = (incomingFiles) => {
     setFiles(incomingFiles);
@@ -98,6 +99,10 @@ function CreateTask() {
   });
 
   const taskSubmit = (data) => {
+    if (status === "End") {
+      toast.error("Cant submit task with status END");
+      return;
+    }
     data.thumbnail = files;
     data.content = model;
     data.start_date = moment(startDate).format("Y-M-D");
@@ -119,15 +124,7 @@ function CreateTask() {
     reader.onloadend = (e) => {
       updateFiles(e.target.result);
     };
-    return (
-      <img
-        key={index}
-        className="camera-stream"
-        width="20%"
-        src={files}
-        alt=""
-      />
-    );
+    return <img key={index} className="img-thumbnail" src={files} alt="" />;
   });
   const fileRejectionsItems = fileRejections.map(({ file, errors }) => (
     <ul key={file.path}>
@@ -141,6 +138,7 @@ function CreateTask() {
     <>
       <Root />
       <div className="main-content">
+        <Toaster position="bottom-right" duration={3500} reverse={true} />
         <div className="card">
           <div className="card-header">Task Form</div>
           <div className="card-body">
@@ -178,19 +176,21 @@ function CreateTask() {
                   Start Date
                 </label>
                 <DatePicker
-                  defaultDate={startDate || new Date()}
-                  minDate={new Date(2023, 11, 1)}
-                  maxDate={new Date(2024, 1, 29)}
-                  onDateChange={handleChangeStartDate}
+                  onChange={(date) => handleChangeStartDate(date)}
+                  value={startDate || new Date()}
+                  className="date-picker"
+                  minDate={new Date("2023-12-12")}
+                  maxDate={new Date("2024-02-11")}
                 />
                 <label htmlFor="" className="label">
                   Deadline Date
                 </label>
                 <DatePicker
-                  defaultDate={endDate || new Date()}
-                  minDate={startDate || new Date()}
-                  maxDate={new Date(2024, 1, 29)}
-                  onDateChange={handleChangeEndDate}
+                  className="date-picker"
+                  onChange={(date) => handleChangeEndDate(date)}
+                  value={endDate}
+                  minDate={startDate || new Date("2023-12-12")}
+                  maxDate={new Date("2024-02-11")}
                 />
                 <label htmlFor="" className="label">
                   Thumbnail
@@ -202,8 +202,14 @@ function CreateTask() {
                     <em>(Only *.jpeg and *.png images will be accepted)</em>
                   </div>
                   <aside>
-                    <div className="d-flex">{acceptedFileItems}</div>
-                    <div className="d-flex">{fileRejectionsItems}</div>
+                    <div className="d-flex flex-wrap">
+                      <div className="col-12">Accepted Thumbnail:</div>
+                      <div className="col-12">{acceptedFileItems}</div>
+                    </div>
+                    <div className="d-flex flex-wrap">
+                      <div className="col-12">Rejected Thumbnail:</div>
+                      <div className="col-12">{fileRejectionsItems}</div>
+                    </div>
                   </aside>
                 </div>
                 <label htmlFor="status" className="label">

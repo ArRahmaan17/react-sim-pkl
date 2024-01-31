@@ -5,22 +5,24 @@ import Root from "../../routes/Root";
 import DOMPurify from "dompurify";
 import moment from "moment";
 import { Toaster, toast } from "alert";
+import { useDropzone } from "react-dropzone";
 import {
   Button,
   Modal,
   FloatingLabel,
   Form,
-  ListGroup,
   Card,
   Form as FormBootstrap,
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
-  faComment,
   faComments,
+  faPlay,
   faTimeline,
+  faUpload,
   faUser,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { jwtDecode } from "jwt-decode";
 
@@ -28,10 +30,12 @@ function Task() {
   const { id } = useParams("id");
   const navigate = useNavigate();
   const [task, setTask] = useState({});
+  const [taskDetail, setTaskDetail] = useState([]);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const loggedIn = localStorage.getItem("accessToken");
   const [openModal, setOpenModal] = useState(false);
+  const [files, setFiles] = useState("");
   const showModal = () => setOpenModal(true);
   const hideModal = () => setOpenModal(false);
   const user = jwtDecode(loggedIn);
@@ -50,6 +54,40 @@ function Task() {
         toast.success("Your comment added");
       });
   };
+  const fileSize = (file) => {
+    if (file.size > 100000) {
+      return {
+        code: "file size to large",
+        message: `size is larger than 100kb`,
+      };
+    }
+    return null;
+  };
+  const updateFiles = (incomingFiles) => {
+    setFiles(incomingFiles);
+  };
+  const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
+    useDropzone({
+      accept: { "image/*": [".jpg", ".png", ".jpeg"] },
+      maxFiles: 1,
+      validator: fileSize,
+    });
+  const acceptedFileItems = acceptedFiles.map((file, index) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = (e) => {
+      updateFiles(e.currentTarget.result);
+    };
+    return <img key={index} className="img-thumbnail" src={files} alt="" />;
+  });
+  const fileRejectionsItems = fileRejections.map(({ file, errors }) => (
+    <ul key={file.path}>
+      {file.name} - {file.size / 1000}kb
+      {errors.map((err) => (
+        <li key={err.code}>{err.message}</li>
+      ))}
+    </ul>
+  ));
 
   useEffect(() => {
     if (loggedIn) {
@@ -60,6 +98,7 @@ function Task() {
         .then((response) => {
           setTask(response.data.data);
           setComments(response.data.data.tasks_comments);
+          setTaskDetail(response.data.data.tasks_details);
         })
         .catch((error) => {
           navigate("/mentor/task");
@@ -98,9 +137,15 @@ function Task() {
               __html: DOMPurify.sanitize(task.content),
             }}
           ></div>
-          <Button variant="primary" className="mx-3" onClick={showModal}>
-            <FontAwesomeIcon icon={faTimeline} /> Update Timeline Task
-          </Button>
+          {taskDetail && taskDetail.length === 0 ? (
+            <Button variant="success" className="mx-3" onClick={showModal}>
+              <FontAwesomeIcon icon={faPlay} /> Start Task
+            </Button>
+          ) : (
+            <Button variant="primary" className="mx-3" onClick={showModal}>
+              <FontAwesomeIcon icon={faTimeline} /> Update Timeline Task
+            </Button>
+          )}
           <hr />
           <div className="comment-section">
             <FloatingLabel
@@ -187,14 +232,31 @@ function Task() {
                 style={{ height: "100px" }}
               />
             </FloatingLabel>
+            <div className="container">
+              <div {...getRootProps({ className: "dropzone" })}>
+                <input id="thumbnail" {...getInputProps()} />
+                <p>click to select files</p>
+                <em>(Only *.jpeg and *.png images will be accepted)</em>
+              </div>
+              <aside>
+                <div className="d-flex flex-wrap">
+                  <div className="col-12">Accepted Thumbnail:</div>
+                  <div className="col-12">{acceptedFileItems}</div>
+                </div>
+                <div className="d-flex flex-wrap">
+                  <div className="col-12">Rejected Thumbnail:</div>
+                  <div className="col-12">{fileRejectionsItems}</div>
+                </div>
+              </aside>
+            </div>
           </FormBootstrap>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={hideModal}>
-            Close
+            <FontAwesomeIcon icon={faX} /> Close
           </Button>
-          <Button variant="primary" onClick={hideModal}>
-            Save Changes
+          <Button variant="warning" onClick={hideModal}>
+            <FontAwesomeIcon icon={faUpload} /> Update Timeline
           </Button>
         </Modal.Footer>
       </Modal>

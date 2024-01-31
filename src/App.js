@@ -1,5 +1,5 @@
 import './App.css';
-import { createBrowserRouter, Route, RouterProvider, Routes } from 'react-router-dom'
+import { createBrowserRouter, Route, RouterProvider, Routes, useNavigate } from 'react-router-dom'
 import User from './pages/User/User';
 import Register from './pages/Auth/Register';
 import All from './pages/User/All';
@@ -11,6 +11,13 @@ import CreateTask from './pages/Mentor/CreateTask';
 import Task from './pages/Mentor/Task';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UpdateTask from './pages/Mentor/UpdateTask';
+import Push from 'push.js'
+import { Fab, Action } from 'react-tiny-fab';
+import 'react-tiny-fab/dist/styles.css';
+import { useEffect } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faInfo, faMessage } from '@fortawesome/free-solid-svg-icons';
+import Chats from './pages/User/Chats';
 
 const router = createBrowserRouter([
   {
@@ -42,16 +49,27 @@ const router = createBrowserRouter([
     path: "*",
     Component: Root
   }
-])
+]);
 
 export default function App() {
-  return <RouterProvider router={router} />
+  useEffect(() => {
+    Push.Permission.request();
+    // Push.create("Welcome aboard captain", {
+    //   body: "test notification",
+    //   timeout: 2500,
+    //   requireInteraction: true,
+    // });
+  });
+  return (<>
+    <Fab icon={<FontAwesomeIcon icon={faMessage} />} event='click' onClick={() => { console.log('test') }} />
+    <RouterProvider router={router} /></>)
 }
 function Root() {
   return (
     <Routes>
       <Route path='/' Component={All} />
       <Route path='/create-user' Component={Register} />
+      <Route path='/chats' Component={Chats} />
       <Route path='/user/:id' exact Component={User} />
       <Route path='/user/:id/update' exact Component={ProfileUser} />
       <Route path='/attendance' exact Component={Attendance} />
