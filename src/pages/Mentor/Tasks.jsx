@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
+import FabButton from "../components/FabButton";
 function Tasks() {
   let loggedIn = localStorage.getItem("accessToken");
   let [tasks, setTasks] = useState([]);
@@ -29,6 +30,7 @@ function Tasks() {
   return (
     <>
       <Root />
+      <FabButton />
       <div className="main-content">
         <div className="card">
           <div className="card-footer">

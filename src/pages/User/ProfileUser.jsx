@@ -4,6 +4,7 @@ import * as Yub from "yup";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Root from "../../routes/Root";
+import FabButton from "../components/FabButton";
 
 function ProfileUser() {
   const loggedIn = localStorage.getItem("accessToken");
@@ -107,6 +108,7 @@ function ProfileUser() {
   return (
     <>
       <Root />
+      <FabButton />
       <div className="main-content">
         <div className="card">
           <div className="card-body">

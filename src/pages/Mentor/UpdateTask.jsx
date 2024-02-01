@@ -18,6 +18,7 @@ import * as Yub from "yup";
 import axios from "axios";
 import { Toaster, toast } from "alert";
 import { useNavigate, useParams } from "react-router-dom";
+import FabButton from "../components/FabButton.jsx";
 
 function UpdateTask() {
   const [model, setModel] = useState("");
@@ -97,7 +98,6 @@ function UpdateTask() {
     if (files !== "") {
       data.thumbnail = files;
     }
-    console.log(data);
     axios
       .post(`http://127.0.0.1:3001/mentor/task/${id}/update`, data, {
         headers: { "X-Access-Token": loggedIn },
@@ -143,6 +143,7 @@ function UpdateTask() {
   return (
     <>
       <Root />
+      <FabButton />
       <div className="main-content">
         <Toaster position="bottom-right" duration={3500} reverse={true} />
         <div className="card">

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Root from "../../routes/Root";
+import FabButton from "../components/FabButton";
 
 function All() {
   const [listOfUsers, setUsers] = useState([]);
@@ -29,6 +30,7 @@ function All() {
   return (
     <>
       <Root />
+      <FabButton />
       <div className="main-content">
         {listOfUsers.map((value, key) => {
           return (

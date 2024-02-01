@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Root from "../../routes/Root";
+import FabButton from "../components/FabButton";
 function User() {
   let navigate = useNavigate();
   let { id } = useParams();
@@ -28,6 +29,7 @@ function User() {
   return (
     <>
       <Root />
+      <FabButton />
       <div className="main-content">
         <div className="card">
           <div className="card-header">Detail User {id}</div>

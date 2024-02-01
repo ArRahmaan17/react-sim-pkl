@@ -18,6 +18,7 @@ import * as Yub from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Toaster, toast } from "alert";
+import FabButton from "../components/FabButton.jsx";
 
 function CreateTask() {
   const fileSize = (file) => {
@@ -137,6 +138,7 @@ function CreateTask() {
   return (
     <>
       <Root />
+      <FabButton />
       <div className="main-content">
         <Toaster position="bottom-right" duration={3500} reverse={true} />
         <div className="card">

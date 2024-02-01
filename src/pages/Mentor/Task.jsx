@@ -25,6 +25,7 @@ import {
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { jwtDecode } from "jwt-decode";
+import FabButton from "../components/FabButton";
 
 function Task() {
   const { id } = useParams("id");
@@ -110,6 +111,7 @@ function Task() {
   return (
     <>
       <Root />
+      <FabButton />
       <div className="main-content">
         <Toaster position="bottom-right" duration={3500} reverse={true} />
         <div className="card">
