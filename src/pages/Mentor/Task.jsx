@@ -42,19 +42,30 @@ function Task() {
   const showModal = () => setOpenModal(true);
   const hideModal = () => setOpenModal(false);
   const user = jwtDecode(loggedIn);
-  const startTask = () => {
-    console.log(id);
+  const updateTimeline = (data) => {
+    axios
+      .post(`http://127.0.0.1:3001/user/task/${id}/update`, data, {
+        headers: { "X-Access-Token": loggedIn },
+      })
+      .then((response) => {})
+      .catch((error) => {});
+  };
+  const confirmStartTask = () => {
     confirmAlert({
       title: "Confirm to start this Task",
       message: "Are you sure to start this task.",
       buttons: [
         {
           label: "Sure",
-          onClick: () => alert("Click Yes"),
+          onClick: () =>
+            updateTimeline({
+              status: "Start",
+              description: `${user.username} starting task ${task.title}`,
+            }),
         },
         {
           label: "Cancel",
-          onClick: () => alert("Click No"),
+          onClick: () => console.log("canceled"),
         },
       ],
     });
@@ -159,7 +170,11 @@ function Task() {
             }}
           ></div>
           {taskDetail && taskDetail.length === 0 ? (
-            <Button variant="success" className="mx-3" onClick={startTask}>
+            <Button
+              variant="success"
+              className="mx-3"
+              onClick={confirmStartTask}
+            >
               <FontAwesomeIcon icon={faPlay} /> Start Task
             </Button>
           ) : (
