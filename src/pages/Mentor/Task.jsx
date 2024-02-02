@@ -26,6 +26,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { jwtDecode } from "jwt-decode";
 import FabButton from "../components/FabButton";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 function Task() {
   const { id } = useParams("id");
@@ -40,6 +42,23 @@ function Task() {
   const showModal = () => setOpenModal(true);
   const hideModal = () => setOpenModal(false);
   const user = jwtDecode(loggedIn);
+  const startTask = () => {
+    console.log(id);
+    confirmAlert({
+      title: "Confirm to start this Task",
+      message: "Are you sure to start this task.",
+      buttons: [
+        {
+          label: "Sure",
+          onClick: () => alert("Click Yes"),
+        },
+        {
+          label: "Cancel",
+          onClick: () => alert("Click No"),
+        },
+      ],
+    });
+  };
   const commentSubmit = () => {
     if (comment.length < 1) {
       return;
@@ -140,7 +159,7 @@ function Task() {
             }}
           ></div>
           {taskDetail && taskDetail.length === 0 ? (
-            <Button variant="success" className="mx-3" onClick={showModal}>
+            <Button variant="success" className="mx-3" onClick={startTask}>
               <FontAwesomeIcon icon={faPlay} /> Start Task
             </Button>
           ) : (

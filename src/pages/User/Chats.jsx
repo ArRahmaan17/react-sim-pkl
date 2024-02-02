@@ -1,28 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Root from "../../routes/Root";
-const { io } = require("socket.io-client");
+import { socketContext } from "../../helpers/context";
 
 function Chats() {
-  const socket = io("http://127.0.0.1:3001");
+  const socket = useContext(socketContext);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 
   const handleInputChange = (e) => {
+    console.log(messages, "change input");
     setInputMessage(e.target.value);
   };
 
   const handleSendMessage = () => {
     if (inputMessage.trim() !== "") {
-      setMessages([...messages, { text: inputMessage, sender: "user" }]);
+      let data = { text: inputMessage, sender: "user" };
+      setMessages([...messages, data]);
       // You can also make an API call here to send the message to a server or bot
-      socket.emit("send_message", { text: inputMessage, sender: "user" });
+      socket.emit("send_message", data);
       setInputMessage("");
+      console.log(messages, "send message");
     }
   };
 
   useEffect(() => {
     socket.on("message_received", (data) => {
       setMessages([...messages, data]);
+      console.log(messages, "received message");
     });
   }, [socket]);
 

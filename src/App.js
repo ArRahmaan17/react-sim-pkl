@@ -14,12 +14,10 @@ import UpdateTask from './pages/Mentor/UpdateTask';
 import Push from 'push.js'
 import 'react-tiny-fab/dist/styles.css'
 import Chats from './pages/User/Chats';
-import { useEffect } from 'react';
-export default function App(props) {
-  // console.log(props)
-
-  const socket = props.dataSocket
-  // console.log(socket)
+import { socketContext } from './helpers/context';
+import { useEffect, useContext } from 'react';
+export default function App() {
+  const socket = useContext(socketContext);
   const router = createBrowserRouter([
     {
       path: "/",
@@ -57,8 +55,7 @@ export default function App(props) {
   useEffect(() => {
     Push.Permission.request();
     socket.on("message_received", (data) => {
-      console.log(data)
-      Push.create(`Chat From ${data.sender}`, { body: `${data.text} your socket ${socket.id}` });
+      Push.create(`Chat From ${data.sender}`, { body: `${data.text}` });
     });
   }, [socket])
   return (<>
