@@ -8,7 +8,6 @@ function Chats() {
   const [inputMessage, setInputMessage] = useState("");
 
   const handleInputChange = (e) => {
-    console.log(messages, "change input");
     setInputMessage(e.target.value);
   };
 
@@ -17,16 +16,14 @@ function Chats() {
       let data = { text: inputMessage, sender: "user" };
       setMessages([...messages, data]);
       // You can also make an API call here to send the message to a server or bot
-      socket.emit("send_message", data);
+      socket.emit("send_message", [...messages, data]);
       setInputMessage("");
-      console.log(messages, "send message");
     }
   };
 
   useEffect(() => {
     socket.on("message_received", (data) => {
-      setMessages([...messages, data]);
-      console.log(messages, "received message");
+      setMessages(data);
     });
   }, [socket]);
 

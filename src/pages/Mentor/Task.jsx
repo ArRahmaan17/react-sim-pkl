@@ -33,6 +33,7 @@ function Task() {
   const { id } = useParams("id");
   const navigate = useNavigate();
   const [task, setTask] = useState({});
+  const [update, setUpdate] = useState(false);
   const [taskDetail, setTaskDetail] = useState([]);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
@@ -44,7 +45,7 @@ function Task() {
   const user = jwtDecode(loggedIn);
   const updateTimeline = (data) => {
     axios
-      .post(`http://127.0.0.1:3001/user/task/${id}/update`, data, {
+      .post(`http://127.0.0.1:3001/users/task/${id}/update`, data, {
         headers: { "X-Access-Token": loggedIn },
       })
       .then((response) => {})
@@ -56,7 +57,7 @@ function Task() {
       message: "Are you sure to start this task.",
       buttons: [
         {
-          label: "Sure",
+          label: "Sure!",
           onClick: () =>
             updateTimeline({
               status: "Start",
@@ -65,7 +66,7 @@ function Task() {
         },
         {
           label: "Cancel",
-          onClick: () => console.log("canceled"),
+          onClick: () => toast.error("Canceling process"),
         },
       ],
     });
@@ -83,6 +84,7 @@ function Task() {
         setComment("");
         setComments(response.data.data);
         toast.success("Your comment added");
+        setUpdate(false);
       });
   };
   const fileSize = (file) => {
@@ -130,6 +132,7 @@ function Task() {
           setTask(response.data.data);
           setComments(response.data.data.tasks_comments);
           setTaskDetail(response.data.data.tasks_details);
+          setUpdate(false);
         })
         .catch((error) => {
           navigate("/mentor/task");
@@ -137,7 +140,7 @@ function Task() {
     } else {
       navigate("/login");
     }
-  }, [loggedIn]);
+  }, [update]);
   return (
     <>
       <Root />

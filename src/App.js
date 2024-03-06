@@ -55,7 +55,7 @@ export default function App() {
   useEffect(() => {
     Push.Permission.request();
     socket.on("message_received", (data) => {
-      Push.create(`Chat From ${data.sender}`, { body: `${data.text}` });
+      Push.create(`Chat From ${data[data.length - 1].sender}`, { body: `${data[data.length - 1].text}` });
     });
   }, [socket])
   return (<>
