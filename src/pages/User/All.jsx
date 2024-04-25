@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,17 +6,18 @@ import Root from "../../routes/Root";
 import FabButton from "../components/FabButton";
 
 function All() {
+  const validToken = useContext("validToken");
+  const token = useContext("token");
   const [listOfUsers, setUsers] = useState([]);
   let navigate = useNavigate();
   useEffect(() => {
-    const loggedIn = localStorage.getItem("accessToken");
-    if (!loggedIn) {
+    if (!validToken) {
       navigate("/login");
     } else {
       axios
         .get("http://localhost:3001/users", {
           headers: {
-            "X-ACCESS-TOKEN": loggedIn,
+            "X-ACCESS-TOKEN": token,
           },
         })
         .then((response) => {
@@ -26,7 +27,7 @@ function All() {
           setUsers(error.response.data.data);
         });
     }
-  }, [navigate]);
+  }, [navigate, validToken, token]);
   return (
     <>
       <Root />

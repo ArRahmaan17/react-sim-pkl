@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Root from "../../routes/Root";
 import Webcam from "react-webcam";
 import { Form, Field, Formik, ErrorMessage } from "formik";
 import * as Yub from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import { FloatingLabel } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -25,17 +24,17 @@ function Attendance() {
   const [id, setId] = useState("");
   const [error, setError] = useState(null);
   const [status, setStatus] = useState(true);
-  const loggedIn = localStorage.getItem("accessToken");
+  const validToken = useContext("validToken");
+  const token = useContext("token");
   useEffect(() => {
-    if (!loggedIn) {
+    if (!validToken) {
       navigate("/login");
     } else {
-      const token = jwtDecode(localStorage.getItem("accessToken"));
       setUsername(token.username);
       setId(token.id);
       axios
         .get(`http://localhost:3001/users/attendance/${token.id}`, {
-          headers: { "X-ACCESS-TOKEN": loggedIn },
+          headers: { "X-ACCESS-TOKEN": token },
         })
         .then((response) => {
           setStatus(true);
@@ -58,7 +57,7 @@ function Attendance() {
         );
       }
     }
-  }, []);
+  }, [validToken]);
   const capture = () => {
     getWidthSource(ref.current.video.clientWidth);
     getHeightSource(ref.current.video.clientHeight);
@@ -95,7 +94,7 @@ function Attendance() {
     data.location = document.getElementById("location").value;
     axios
       .post("http://localhost:3001/users/attendance", data, {
-        headers: { "X-ACCESS-TOKEN": loggedIn },
+        headers: { "X-ACCESS-TOKEN": token },
       })
       .then((response) => {
         navigate("/");

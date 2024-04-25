@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Root from "../../routes/Root";
 import { Form, Field, Formik, ErrorMessage } from "formik";
 import * as Yub from "yup";
@@ -9,10 +9,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
 
 function Login() {
+  const validToken = useContext("validToken");
   let navigate = useNavigate();
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
+    if (validToken) {
       navigate("/");
     }
   }, [navigate]);
