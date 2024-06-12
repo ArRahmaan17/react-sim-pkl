@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yub from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Root from "../../routes/Root";
 import { FloatingLabel } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
@@ -11,12 +10,6 @@ import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 function CreateUser() {
   let navigate = useNavigate();
   let [errorMessage, setErrorMessage] = useState("");
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      navigate("/");
-    }
-  }, [navigate]);
   const submitForm = (data) => {
     axios
       .post("http://localhost:3001/auth/registration", data)
@@ -38,7 +31,6 @@ function CreateUser() {
   });
   return (
     <>
-      <Root />
       <div className="main-content">
         <div className="card">
           <div className="card-body">

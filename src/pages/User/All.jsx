@@ -1,13 +1,16 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Root from "../../routes/Root";
 import FabButton from "../components/FabButton";
+import {
+  token as contextToken,
+  validToken as contextValidToken,
+} from "../../helpers/context";
 
 function All() {
-  const validToken = useContext("validToken");
-  const token = useContext("token");
+  let [validToken] = useState(contextValidToken);
+  let [token] = useState(contextToken);
   const [listOfUsers, setUsers] = useState([]);
   let navigate = useNavigate();
   useEffect(() => {
@@ -27,7 +30,7 @@ function All() {
           setUsers(error.response.data.data);
         });
     }
-  }, [navigate, validToken, token]);
+  }, [navigate]);
   return (
     <>
       <Root />

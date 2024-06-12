@@ -7,15 +7,17 @@ import { useNavigate } from "react-router-dom";
 import { FloatingLabel } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import { validToken } from "../../helpers/context";
 
 function Login() {
-  const validToken = useContext("validToken");
+  let validToken = useContext(validToken);
   let navigate = useNavigate();
   useEffect(() => {
+    console.log(validToken);
     if (validToken) {
       navigate("/");
     }
-  }, [navigate]);
+  }, [navigate, validToken]);
   let [message, setMessage] = useState("");
   const initialValues = { username: "", password: "" };
   const validationSchema = Yub.object().shape({

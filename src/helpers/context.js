@@ -8,11 +8,12 @@ export const AuthContext = createContext(null);
 export const socketContext = createContext(io("http://127.0.0.1:3001"));
 let validToken = false;
 let token = "";
+let user = "";
 if (localStorage.getItem("accessToken") !== null) {
     token = localStorage.getItem("accessToken");
-    token = jwtDecode(token);
-    if (token.hasOwnProperty('lifetime') && token.lifetime > moment().unix()) {
+    user = jwtDecode(token);
+    if (user.hasOwnProperty('lifetime') && user.lifetime > moment().unix()) {
         validToken = true
     }
 }
-export { token, validToken };
+export { token, validToken, user };

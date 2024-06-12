@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import Root from "../../routes/Root";
-import { socketContext } from "../../helpers/context";
+import { socketContext, user, token, validToken } from "../../helpers/context";
 
 function Chats() {
   const socket = useContext(socketContext);
+  let [userLoggedIn, setUserLoggedIn] = useState({});
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 
@@ -13,7 +14,7 @@ function Chats() {
 
   const handleSendMessage = () => {
     if (inputMessage.trim() !== "") {
-      let data = { text: inputMessage, sender: "user" };
+      let data = { text: inputMessage, sender: userLoggedIn.username };
       setMessages([...messages, data]);
       // You can also make an API call here to send the message to a server or bot
       socket.emit("send_message", [...messages, data]);
@@ -22,6 +23,7 @@ function Chats() {
   };
 
   useEffect(() => {
+    userLoggedIn = setUserLoggedIn(user);
     socket.on("message_received", (data) => {
       setMessages(data);
     });
@@ -29,7 +31,6 @@ function Chats() {
 
   return (
     <>
-      <Root />
       <div className="container">
         <div className="card">
           <div className="chat-widget">
