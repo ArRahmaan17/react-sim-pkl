@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import Root from "../../routes/Root";
 import { socketContext, user, token, validToken } from "../../helpers/context";
 
 function Chats() {
@@ -32,6 +31,14 @@ function Chats() {
   return (
     <>
       <div className="container">
+        <div className="card">
+          <div className="card-header">
+            <div className="row">
+              <div className="col">Public Chat</div>
+              <div className="col text-end">{userLoggedIn.username}</div>
+            </div>
+          </div>
+        </div>
         <div className="card">
           <div className="chat-widget">
             <div className="chat-messages">
