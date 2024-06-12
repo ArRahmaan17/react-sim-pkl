@@ -42,14 +42,40 @@ function Chats() {
         <div className="card">
           <div className="chat-widget">
             <div className="chat-messages">
-              {messages.map((message, index) => (
-                <div
-                  key={index}
-                  className={`message-container ${message.sender}`}
-                >
-                  <span className="message-text">{message.text}</span>
+              {messages.length > 0 ? (
+                messages.map((message, index) => (
+                  <div
+                    key={index}
+                    className={`d-flex ${
+                      message.sender === userLoggedIn.username
+                        ? "justify-content-end"
+                        : "justify-content-start"
+                    }`}
+                  >
+                    <div
+                      className={`col-3 message-container ${
+                        message.sender === userLoggedIn.username
+                          ? "text-end"
+                          : "text-start"
+                      }`}
+                    >
+                      <span
+                        className={`${
+                          message.sender === userLoggedIn.username
+                            ? "message-text-you"
+                            : "message-text-other"
+                        }`}
+                      >
+                        {message.text}
+                      </span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center p-4 text-sm text-muted">
+                  Berbincang di platform ini bersifat sementara
                 </div>
-              ))}
+              )}
             </div>
             <div className="chat-input">
               <input

@@ -38,6 +38,14 @@
   border-bottom: .1rem solid rgba(255, 255, 255, .5);
 }
 
+.text-muted {
+  color: #909090;
+}
+
+.text-sm {
+  font-size: .9rem;
+}
+
 .main-content {
   display: block;
   margin: 0 auto;
@@ -161,8 +169,17 @@
   padding: 10px 5px 0 5px;
 }
 
-.message-text {
-  background-color: #00eeff;
+.message-text-you {
+  background-color: #015205;
+  color: #fff;
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+.message-text-other {
+  background-color: #445f46;
+  color: #fff;
   display: inline-block;
   padding: 10px 20px;
   border-radius: 10px;
