@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yub from "yup";
 import axios from "axios";
@@ -6,15 +6,27 @@ import { useNavigate } from "react-router-dom";
 import { FloatingLabel } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  socketContext,
+  userContext,
+  token,
+  validToken,
+} from "../../helpers/context";
+let env = require("../../config/config.json");
 
 function CreateUser() {
   let navigate = useNavigate();
   let [errorMessage, setErrorMessage] = useState("");
+  useEffect(() => {
+    if (validToken === true) {
+      navigate("/");
+    }
+  }, [validToken]);
   const submitForm = (data) => {
     axios
-      .post("http://localhost:3001/auth/registration", data)
+      .post(`${env.backend_url}auth/registration`, data)
       .then((response) => {
-        navigate("/");
+        navigate("/login");
       })
       .catch((error) => {
         setErrorMessage(error.response.data.errors[0].message);

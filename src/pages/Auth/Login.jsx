@@ -7,17 +7,18 @@ import { useNavigate } from "react-router-dom";
 import { FloatingLabel } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
-import { validToken } from "../../helpers/context";
+import { socketContext, user, token, validToken } from "../../helpers/context";
+let env = require("../../config/config.json");
 
 function Login() {
-  let validToken = useContext(validToken);
   let navigate = useNavigate();
+  let [tokenStatus, setTokenStatus] = useState(useContext(validToken));
   useEffect(() => {
     console.log(validToken);
     if (validToken) {
       navigate("/");
     }
-  }, [navigate, validToken]);
+  }, [validToken]);
   let [message, setMessage] = useState("");
   const initialValues = { username: "", password: "" };
   const validationSchema = Yub.object().shape({
@@ -26,7 +27,7 @@ function Login() {
   });
   const loginProcess = (data) => {
     axios
-      .post("http://localhost:3001/auth/login", data)
+      .post(`${env.backend_url}auth/login`, data)
       .then((response) => {
         localStorage.setItem("accessToken", response.data.data.accessToken);
         navigate("/");
@@ -37,7 +38,7 @@ function Login() {
   };
   return (
     <>
-      <Root />
+      {/* <Root /> */}
       <div className="main-content">
         <div className="card">
           <div className="card-header">

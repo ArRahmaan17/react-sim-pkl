@@ -6,6 +6,7 @@ import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 import FabButton from "../components/FabButton";
+let env = require("../config/config.json");
 function Tasks() {
   let loggedIn = localStorage.getItem("accessToken");
   let [tasks, setTasks] = useState([]);
@@ -16,7 +17,7 @@ function Tasks() {
   useEffect(() => {
     if (loggedIn) {
       axios
-        .get("http://localhost:3001/mentor/task", {
+        .get(`${env.backend_url}mentor/task`, {
           headers: { "X-Access-Token": loggedIn },
         })
         .then((response) => {
@@ -44,7 +45,7 @@ function Tasks() {
             <div key={task.id} className="card">
               <div className="card-body">
                 <img
-                  src={"http://127.0.0.1:3001/" + task.thumbnail}
+                  src={env.backend_url + "/" + task.thumbnail}
                   alt=""
                   className="img-thumbnail"
                   onClick={() => {

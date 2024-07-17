@@ -19,6 +19,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Toaster, toast } from "alert";
 import FabButton from "../components/FabButton.jsx";
+let env = require("../config/config.json");
 
 function CreateTask() {
   const fileSize = (file) => {
@@ -109,7 +110,7 @@ function CreateTask() {
     data.start_date = moment(startDate).format("Y-M-D");
     data.deadline_date = moment(endDate).format("Y-M-D");
     axios
-      .post("http://localhost:3001/mentor/task/create", data, {
+      .post(`${env.backend_url}mentor/task/create`, data, {
         headers: {
           "X-ACCESS-TOKEN": loggedIn,
         },

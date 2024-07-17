@@ -19,7 +19,7 @@ import axios from "axios";
 import { Toaster, toast } from "alert";
 import { useNavigate, useParams } from "react-router-dom";
 import FabButton from "../components/FabButton.jsx";
-
+let env = require("../config/config.json");
 function UpdateTask() {
   const [model, setModel] = useState("");
   const [startDate, setStartDate] = useState(null);
@@ -28,6 +28,7 @@ function UpdateTask() {
   const [files, setFiles] = useState("");
   const loggedIn = localStorage.getItem("accessToken");
   const [task, setTask] = useState({});
+
   const updateFiles = (incomingFiles) => {
     setFiles(incomingFiles);
   };
@@ -35,7 +36,7 @@ function UpdateTask() {
   const navigate = useNavigate();
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/mentor/task/${id}`, {
+      .get(`${env.backend_url}mentor/task/${id}`, {
         headers: { "X-Access-Token": loggedIn },
       })
       .then((response) => {
@@ -99,7 +100,7 @@ function UpdateTask() {
       data.thumbnail = files;
     }
     axios
-      .post(`http://127.0.0.1:3001/mentor/task/${id}/update`, data, {
+      .post(`${env.backend_url}mentor/task/${id}/update`, data, {
         headers: { "X-Access-Token": loggedIn },
       })
       .then((response) => {
@@ -216,7 +217,7 @@ function UpdateTask() {
                       <>
                         <div>Recent Thumbnail:</div>
                         <img
-                          src={"http://127.0.0.1:3001/" + task.thumbnail}
+                          src={env.backend_url + "/" + task.thumbnail}
                           className="img-thumbnail"
                           alt={task.thumbnail}
                         />

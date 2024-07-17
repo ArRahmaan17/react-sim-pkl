@@ -7,7 +7,7 @@ import {
   token as contextToken,
   validToken as contextValidToken,
 } from "../../helpers/context";
-
+let env = require("../config/config.json");
 function All() {
   let [validToken] = useState(contextValidToken);
   let [token] = useState(contextToken);
@@ -18,7 +18,7 @@ function All() {
       navigate("/login");
     } else {
       axios
-        .get("http://localhost:3001/users", {
+        .get(`${env.backend_url}users`, {
           headers: {
             "X-ACCESS-TOKEN": token,
           },

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Root from "../../routes/Root";
 import FabButton from "../components/FabButton";
+let env = require("../config/config.json");
 function User() {
   let navigate = useNavigate();
   let { id } = useParams();
@@ -13,7 +14,7 @@ function User() {
       navigate("/login");
     } else {
       axios
-        .get(`http://localhost:3001/users/${id}/`, {
+        .get(`${env.backend_url}users/${id}/`, {
           headers: {
             "X-ACCESS-TOKEN": loggedIn,
           },

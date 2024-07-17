@@ -28,6 +28,7 @@ import { jwtDecode } from "jwt-decode";
 import FabButton from "../components/FabButton";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css";
+let env = require("../config/config.json");
 
 function Task() {
   const { id } = useParams("id");
@@ -43,9 +44,10 @@ function Task() {
   const showModal = () => setOpenModal(true);
   const hideModal = () => setOpenModal(false);
   const user = jwtDecode(loggedIn);
+  let env = require("../config/config.json");
   const updateTimeline = (data) => {
     axios
-      .post(`http://127.0.0.1:3001/users/task/${id}/update`, data, {
+      .post(`${env.backend_url}users/task/${id}/update`, data, {
         headers: { "X-Access-Token": loggedIn },
       })
       .then((response) => {})
@@ -77,7 +79,7 @@ function Task() {
     }
     let data = { content: comment };
     axios
-      .post(`http://127.0.0.1:3001/mentor/task/${id}/comment`, data, {
+      .post(`${env.backend_url}mentor/task/${id}/comment`, data, {
         headers: { "X-Access-Token": loggedIn },
       })
       .then((response) => {
@@ -125,7 +127,7 @@ function Task() {
   useEffect(() => {
     if (loggedIn) {
       axios
-        .get(`http://127.0.0.1:3001/mentor/task/${id}`, {
+        .get(`${env.backend_url}mentor/task/${id}`, {
           headers: { "X-Access-Token": loggedIn },
         })
         .then((response) => {
@@ -162,7 +164,7 @@ function Task() {
         <div className="card">
           <img
             className="img-thumbnail-detail"
-            src={"http://127.0.0.1:3001/" + task.thumbnail}
+            src={"${env.backend_url}" + task.thumbnail}
             alt={task.title}
           />
           <div className="task-title">{task.title}</div>

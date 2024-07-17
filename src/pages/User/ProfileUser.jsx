@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Root from "../../routes/Root";
 import FabButton from "../components/FabButton";
-
+let env = require("../config/config.json");
 function ProfileUser() {
   const loggedIn = localStorage.getItem("accessToken");
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ function ProfileUser() {
         postData.delete("profile_picture");
       }
       axios
-        .post(`http://localhost:3001/users/${id}`, postData, {
+        .post(`${env.backend_url}users/${id}`, postData, {
           headers: {
             "X-ACCESS-TOKEN": loggedIn,
           },
@@ -84,7 +84,7 @@ function ProfileUser() {
       navigate("/login");
     } else {
       axios
-        .get(`http://localhost:3001/users/${id}/`, {
+        .get(`${env.backend_url}users/${id}/`, {
           headers: {
             "X-ACCESS-TOKEN": loggedIn,
           },

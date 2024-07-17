@@ -34,7 +34,7 @@ function Root() {
   return (
     <Routes>
       <Route path='/' exact Component={Chats} />
-      <Route path='/create-user' exact Component={Register} />
+      <Route path='/register' exact Component={Register} />
       <Route path='/login' exact Component={Login} />
     </Routes>
   );

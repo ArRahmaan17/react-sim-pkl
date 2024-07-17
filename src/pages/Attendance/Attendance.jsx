@@ -26,6 +26,7 @@ function Attendance() {
   const [status, setStatus] = useState(true);
   const validToken = useContext("validToken");
   const token = useContext("token");
+  let env = require("../config/config.json");
   useEffect(() => {
     if (!validToken) {
       navigate("/login");
@@ -33,7 +34,7 @@ function Attendance() {
       setUsername(token.username);
       setId(token.id);
       axios
-        .get(`http://localhost:3001/users/attendance/${token.id}`, {
+        .get(`${env.backend_url}users/attendance/${token.id}`, {
           headers: { "X-ACCESS-TOKEN": token },
         })
         .then((response) => {
@@ -93,7 +94,7 @@ function Attendance() {
     data.photo = document.getElementById("photo").value;
     data.location = document.getElementById("location").value;
     axios
-      .post("http://localhost:3001/users/attendance", data, {
+      .post(`${env.backend_url}users/attendance`, data, {
         headers: { "X-ACCESS-TOKEN": token },
       })
       .then((response) => {

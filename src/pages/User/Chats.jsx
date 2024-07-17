@@ -1,8 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
-import { socketContext, user, token, validToken } from "../../helpers/context";
-
+import {
+  socketContext,
+  userContext,
+  token,
+  validToken,
+} from "../../helpers/context";
+import { useNavigate as navigate, useNavigate } from "react-router-dom";
 function Chats() {
+  let navigate = useNavigate();
   const socket = useContext(socketContext);
+  let [tokenStatus, setTokenStatus] = useState(useContext(validToken));
   let [userLoggedIn, setUserLoggedIn] = useState({});
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
@@ -22,7 +29,10 @@ function Chats() {
   };
 
   useEffect(() => {
-    userLoggedIn = setUserLoggedIn(user);
+    if (validToken === false) {
+      navigate("/login");
+    }
+    userLoggedIn = setUserLoggedIn(userContext);
     socket.on("message_received", (data) => {
       setMessages(data);
     });
